@@ -66,7 +66,7 @@ function itemLabel(it){
 }
 
 function listNo(it, idx){
-  if(it.type === "blend" && it.no) return it.no;
+  if((it.type === "blend" || it.type === "single") && it.no) return it.no;
   if(it.type === "guide") return "GUIDE";
   return String(idx + 1).padStart(2,"0");
 }
@@ -86,16 +86,16 @@ function matchesSearch(it, keyword){
 function renderList(){
   const keyword = (q.value||"").toLowerCase().trim();
 
-  let filtered = ITEMS.filter(it=>{
-    if(activeFilter === "all") return true;
-    return it.type === activeFilter;
-  }).filter(it=>matchesSearch(it, keyword));
+  let filtered = ITEMS
+    .filter(it => activeFilter === "all" ? true : it.type === activeFilter)
+    .filter(it => matchesSearch(it, keyword));
 
   countTxt.textContent = String(filtered.length);
 
   itemList.innerHTML = filtered.map((it, idx)=>{
     const no = escapeHtml(listNo(it, idx));
     const title = escapeHtml(it.type === "blend" ? it.name : it.name);
+
     const sub = it.type === "blend"
       ? escapeHtml((it.origin||[]).join(" · "))
       : escapeHtml(it.sub || ((it.origin||[]).join(" · ") || ""));
@@ -121,8 +121,7 @@ function renderList(){
 
   itemList.querySelectorAll(".item").forEach(el=>{
     el.addEventListener("click", ()=>{
-      const id = el.dataset.id;
-      goDetail(id);
+      goDetail(el.dataset.id);
     });
   });
 }
@@ -131,8 +130,20 @@ function renderList(){
 const RECIPES = {
   blend_filter: {
     water_temp: "88°C",
-    hot: { dose:"20g", total:"300g", pours:"30g (Bloom) → 90g → 170g → 20g", add:"가수 10–20g", time:"2:40" },
-    ice: { dose:"20g", total:"200g", pours:"30g (Bloom) → 40g → 110g → 20g", note:"얼음 칠링", time:"2:20" }
+    hot: {
+      dose: "20g",
+      total: "300g",
+      pours: "30g (Bloom) → 90g → 170g → 20g",
+      add: "가수 10–20g",
+      time: "2:40"
+    },
+    ice: {
+      dose: "20g",
+      total: "200g",
+      pours: "30g (Bloom) → 40g → 110g → 20g",
+      note: "얼음 칠링",
+      time: "2:20"
+    }
   },
   blend_espresso: {
     "no12": { basket:"IMS 18g", dose:"16.8g", yield:"35g", time:"25–28s", temp:"93°C" },
@@ -141,20 +152,77 @@ const RECIPES = {
   },
   single_filter: {
     water_temp: "90°C",
-    hot: { dose:"20g", total:"300ml", pours:"30g → 90g → 170g → 20g", add:"가수 10–20g", time:"2:30" },
-    ice: { dose:"20g", total:"200ml", pours:"30g → 50g → 100g → 20g", time:"2:30" }
+    hot: {
+      dose: "20g",
+      total: "300ml",
+      pours: "30g → 90g → 170g → 20g",
+      add: "가수 10–20g",
+      time: "2:30"
+    },
+    ice: {
+      dose: "20g",
+      total: "200ml",
+      pours: "30g → 50g → 100g → 20g",
+      time: "2:30"
+    }
   },
   single_espresso: {
     ethiopia: { basket:"IMS 18g", dose:"16.8g", yield:"47g", time:"38–40s", temp:"93°C" },
     default:  { basket:"IMS 18g", dose:"17.5g", yield:"50g", time:"40–43s", temp:"93°C" }
   },
   dripbag_guide: {
-    hot: { temp:"90°C", total:"180g", pours:"Bloom 20g 포함 · 총 4회 나눔 (총량 180g)", time:"1:30–1:40" },
-    ice: { temp:"90°C", total:"110g", pours:"첫 물 20g (Bloom) + 3번 나눔 (총량 110g)", note:"추출 후 얼음 110g 넣고 저어 마시기", time:"1:30–1:40" }
+    hot: {
+      temp:"90°C",
+      total:"180g",
+      pours:"Bloom 20g 포함 · 총 4회 나눔 (총량 180g)",
+      time:"1:30–1:40"
+    },
+    ice: {
+      temp:"90°C",
+      total:"110g",
+      pours:"첫 물 20g (Bloom) + 3번 나눔 (총량 110g)",
+      note:"추출 후 얼음 110g 넣고 저어 마시기",
+      time:"1:30–1:40"
+    }
   },
-  coldbrew_guide: { lines: ["80g concentrate", "120g water", "Total 200g"] }
+  coldbrew_guide: {
+    lines: ["80g concentrate", "120g water", "Total 200g"]
+  }
 };
 
+/* Roast -> position (0..1) */
+function roastLevel(roast=""){
+  const r = String(roast).toLowerCase().replace(/\s+/g,"");
+  if(r.includes("light")) return 0.22;
+  if(r.includes("medium-dark") || r.includes("mediumdark")) return 0.72;
+  if(r.includes("dark")) return 0.86;
+  if(r.includes("medium")) return 0.55;
+  return 0.55;
+}
+
+function roastBarHtml(roast){
+  if(!roast) return "";
+  const x = roastLevel(roast);
+  const pct = Math.max(0.05, Math.min(0.95, x)) * 100;
+
+  return `
+    <div class="roastWrap">
+      <div class="roastRow">
+        <div class="roastLabel">Roasting Point</div>
+        <div class="roastBar" aria-label="Roasting bar">
+          <div class="roastTicks" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="roastDot" style="left:${pct}%"></div>
+        </div>
+        <div class="roastLabel">${escapeHtml(roast)}</div>
+      </div>
+      <div class="roastEnds"><span>Light</span><span>Dark</span></div>
+    </div>
+  `;
+}
+
+/* YouTube thumbnail helper */
 function createYouTubeThumb(videoId){
   return `
     <div class="yt-wrap" data-video="${escapeHtml(videoId)}">
@@ -176,30 +244,42 @@ function renderDetail(id){
     return;
   }
 
-  crumbName.textContent = it.type === "blend" ? `${it.no} ${it.name}` : it.name;
+  crumbName.textContent = it.type === "blend" ? `${it.no} ${it.name}` : (it.no ? `${it.no} ${it.name}` : it.name);
 
+  /* Title: main = NO.1 / S.1, subtitle = Daily / Colombia... */
+  const mainTitle =
+    (it.type === "blend" || it.type === "single")
+      ? escapeHtml(it.no || it.name)
+      : escapeHtml(it.name);
+
+  const subTitle =
+    (it.type === "blend" || it.type === "single")
+      ? escapeHtml(it.name) /* 부제 */
+      : escapeHtml(it.sub || "");
+
+  const subtitle = subTitle ? `<div class="subTitle">${subTitle}</div>` : "";
+  const desc = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
+
+  /* chips */
   const chips = [];
   if(it.type === "blend"){
-    if(it.roast) chips.push(`Roast: ${it.roast}`);
     if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
   } else if(it.type === "single"){
+    if(it.sub) chips.push(it.sub);
     if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
     if(it.process) chips.push(`Process: ${it.process}`);
     if(it.variety) chips.push(`Variety: ${it.variety}`);
-    if(it.roast) chips.push(`Roast: ${it.roast}`);
   } else {
     if(it.sub) chips.push(it.sub);
   }
-
   const chipHtml = chips.map(x=>`<span class="chip">${escapeHtml(x)}</span>`).join("");
+
   const noteHtml = (it.cup_note||[]).map(n=>`<span class="chip">${escapeHtml(n)}</span>`).join("");
+  const cupNoteBlock = (it.cup_note && it.cup_note.length)
+    ? `<div class="card"><div class="sectionTitle">Cup Note</div><div class="subline">${noteHtml}</div></div>`
+    : "";
 
-  const title = (it.type === "blend")
-    ? `${escapeHtml(it.no)}<br>${escapeHtml(it.name)}`
-    : escapeHtml(it.name);
-
-  const subtitle = it.sub ? `<div class="desc" style="margin-top:6px;color:var(--navy);letter-spacing:.08em;">${escapeHtml(it.sub)}</div>` : "";
-  const desc = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
+  const roastGraphic = roastBarHtml(it.roast);
 
   const videoBlock = it.video_id
     ? `<div class="card"><div class="sectionTitle">Video</div>${createYouTubeThumb(it.video_id)}</div>`
@@ -207,6 +287,7 @@ function renderDetail(id){
 
   let recipeBlocks = "";
 
+  /* BLEND */
   if(it.type === "blend"){
     const f = RECIPES.blend_filter;
     let esp;
@@ -218,7 +299,17 @@ function renderDetail(id){
       ? `<div class="card"><div class="sectionTitle">Cold Brew</div><pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre></div>`
       : "";
 
+    /* Espresso 위, Filter 아래 */
     recipeBlocks = `
+      <div class="card">
+        <div class="sectionTitle">Espresso</div>
+        <pre>${esp.basket} Basket
+Dose ${esp.dose}
+Yield ${esp.yield}
+Time ${esp.time}
+Water Temp ${esp.temp}</pre>
+      </div>
+
       <div class="card">
         <div class="sectionTitle">Filter</div>
         <pre>Water Temp ${f.water_temp}
@@ -238,19 +329,11 @@ ${f.ice.note}
 Time ${f.ice.time}</pre>
       </div>
 
-      <div class="card">
-        <div class="sectionTitle">Espresso</div>
-        <pre>${esp.basket} Basket
-Dose ${esp.dose}
-Yield ${esp.yield}
-Time ${esp.time}
-Water Temp ${esp.temp}</pre>
-      </div>
-
       ${cold}
     `;
   }
 
+  /* SINGLE */
   if(it.type === "single"){
     if(it.coming_soon){
       recipeBlocks = `<div class="card"><div class="sectionTitle">Recipe</div><pre>Coming soon</pre></div>`;
@@ -259,6 +342,15 @@ Water Temp ${esp.temp}</pre>
       const esp = RECIPES.single_espresso[it.espresso_profile || "default"] || RECIPES.single_espresso.default;
 
       recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Espresso</div>
+          <pre>${esp.basket} Basket
+Dose ${esp.dose}
+Yield ${esp.yield}
+Time ${esp.time}
+Water Temp ${esp.temp}</pre>
+        </div>
+
         <div class="card">
           <div class="sectionTitle">Filter</div>
           <pre>Water Temp ${f.water_temp}
@@ -276,19 +368,11 @@ Total ${f.ice.total}
 ${f.ice.pours}
 Time ${f.ice.time}</pre>
         </div>
-
-        <div class="card">
-          <div class="sectionTitle">Espresso</div>
-          <pre>${esp.basket} Basket
-Dose ${esp.dose}
-Yield ${esp.yield}
-Time ${esp.time}
-Water Temp ${esp.temp}</pre>
-        </div>
       `;
     }
   }
 
+  /* GUIDE */
   if(it.type === "guide"){
     if(it.id === "guide-dripbag"){
       const g = RECIPES.dripbag_guide;
@@ -315,16 +399,13 @@ Time ${g.ice.time}</pre>
     }
   }
 
-  const cupNoteBlock = (it.cup_note && it.cup_note.length)
-    ? `<div class="card"><div class="sectionTitle">Cup Note</div><div class="subline">${noteHtml}</div></div>`
-    : "";
-
   detail.innerHTML = `
     <div class="card">
-      <h2 class="h1">${title}</h2>
+      <h2 class="h1">${mainTitle}</h2>
       ${subtitle}
       ${desc}
       ${chipHtml ? `<div class="subline">${chipHtml}</div>` : ``}
+      ${roastGraphic}
     </div>
 
     ${cupNoteBlock}
@@ -338,8 +419,8 @@ document.addEventListener("click", (e)=>{
   const wrap = e.target.closest(".yt-wrap");
   if(!wrap) return;
   if(wrap.querySelector("iframe")) return;
-  const id = wrap.dataset.video;
 
+  const id = wrap.dataset.video;
   wrap.innerHTML = `
     <iframe
       src="https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
@@ -369,3 +450,4 @@ async function init(){
 }
 
 init();
+
