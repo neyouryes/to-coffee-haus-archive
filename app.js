@@ -62,7 +62,7 @@ function animateSwap(hideEl, showEl){
     hideEl.classList.add("hidden");
     hideEl.classList.remove("leave");
     showEl.classList.remove("enter");
-  }, 260);
+  }, 220);
 }
 
 function showList(){
@@ -97,11 +97,13 @@ function goDetail(id){
 function itemLabel(it){
   if(it.type === "blend") return "BLEND";
   if(it.type === "single") return "SINGLE";
-  return "GUIDE";
+  return "GUIDE"; // ✅ 오른쪽 배지는 GUIDE 유지
 }
+
+/* ✅ 왼쪽 넘버 표기 */
 function listNo(it, idx){
   if((it.type === "blend" || it.type === "single") && it.no) return it.no;
-  if(it.type === "guide") return "GUIDE";
+  if(it.type === "guide") return "MD"; // ✅ 왼쪽만 MD
   return String(idx + 1).padStart(2,"0");
 }
 
@@ -112,7 +114,7 @@ function matchesSearch(it, keyword){
 
   const hay = normalizeText([
     it.no, it.name, it.sub, it.desc,
-    it.kw, // invisible keyword field
+    it.kw,
     (it.origin||[]).join(" "),
     it.process, it.variety,
     (it.cup_note||[]).join(" "),
@@ -201,24 +203,10 @@ const RECIPES = {
     default:  { basket:"IMS 18g", dose:"17.5g", yield:"50g", time:"40–43s", temp:"93°C" }
   },
   dripbag_guide: {
-    hot: {
-      temp:"90°C",
-      total:"180g",
-      pours:"20g (Bloom) → 나머지 3번에 나눠 붓기",
-      detail:"총 4번 푸어",
-      time:"1:30–1:40"
-    },
-    ice: {
-      temp:"90°C",
-      total:"110g",
-      pours:"20g (Bloom) → 나머지 2번에 나눠 붓기",
-      detail:"총 3번 푸어 · 추출 후 얼음 110g 넣고 저어서 마시기",
-      time:"1:30–1:40"
-    }
+    hot: { temp:"90°C", total:"180g", pours:"20g (Bloom) → 나머지 3번에 나눠 붓기", detail:"총 4번 푸어", time:"1:30–1:40" },
+    ice: { temp:"90°C", total:"110g", pours:"20g (Bloom) → 나머지 2번에 나눠 붓기", detail:"총 3번 푸어 · 추출 후 얼음 110g 넣고 저어서 마시기", time:"1:30–1:40" }
   },
-  coldbrew_guide: {
-    lines: ["Concentrate 80g", "Water 120g", "Total 200g"]
-  }
+  coldbrew_guide: { lines: ["Concentrate 80g", "Water 120g", "Total 200g"] }
 };
 
 /* roast */
@@ -239,17 +227,12 @@ function roastBarHtml(roast){
     <div class="roastWrap">
       <div class="roastRow">
         <div class="roastLabel">Roasting Point</div>
-
-        <div class="roastStack">
-          <div class="roastBar" aria-label="Roasting bar">
-            <div class="roastTicks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="roastDot" style="left:${pct}%"></div>
-          </div>
-
-          <div class="roastMarks" aria-hidden="true">
-            <span>L</span><span class="mid">M</span><span>D</span>
-          </div>
+        <div class="roastBar" aria-label="Roasting bar">
+          <div class="roastDot" style="left:${pct}%"></div>
         </div>
+      </div>
+      <div class="roastMarks" aria-hidden="true">
+        <span>L</span><span class="mid">M</span><span>D</span>
       </div>
     </div>
   `;
@@ -262,13 +245,13 @@ function createYouTubeThumb(videoId){
       <button class="yt-thumb" type="button" aria-label="Play recipe video">
         <img src="https://i.ytimg.com/vi/${escapeHtml(videoId)}/hqdefault.jpg" alt="Recipe video thumbnail">
         <div class="yt-overlay"></div>
-        <div class="yt-playDot" aria-hidden="true"></div>
         <div class="yt-caption">recipe</div>
       </button>
     </div>
   `;
 }
 
+/* click thumb -> play */
 document.addEventListener("click", (e)=>{
   const wrap = e.target.closest(".yt-wrap");
   if(!wrap) return;
@@ -492,4 +475,3 @@ async function init(){
 }
 
 init();
-
