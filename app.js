@@ -227,16 +227,26 @@ function roastBarHtml(roast){
     <div class="roastWrap">
       <div class="roastRow">
         <div class="roastLabel">Roasting Point</div>
-        <div class="roastBar" aria-label="Roasting bar">
-          <div class="roastDot" style="left:${pct}%"></div>
+
+        <div class="roastStack">
+          <div class="roastBar" aria-label="Roasting bar">
+            <!-- ✅ bar tick lines -->
+            <div class="roastTicks" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="roastDot" style="left:${pct}%"></div>
+          </div>
+
+          <div class="roastMarks" aria-hidden="true">
+            <span>L</span><span class="mid">M</span><span>D</span>
+          </div>
         </div>
-      </div>
-      <div class="roastMarks" aria-hidden="true">
-        <span>L</span><span class="mid">M</span><span>D</span>
+
       </div>
     </div>
   `;
 }
+
 
 /* video */
 function createYouTubeThumb(videoId){
