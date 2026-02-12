@@ -121,49 +121,58 @@ body{
   color:var(--sub);
 }
 
-/* DETAIL TYPOGRAPHY */
+/* ============================ */
+/* DETAIL TYPOGRAPHY (FINAL)    */
+/* ============================ */
 
+/* 기본(Blend 기준): NO.1 크게/굵게 */
 .h1{
-  font-size:42px;
-  font-weight:800;
+  font-size:46px;          /* ✅ 더 크게 */
+  font-weight:900;         /* ✅ 더 굵게 */
   letter-spacing:3px;
   margin-bottom:8px;
+  line-height:1.05;
 }
 
+/* 기본(Blend 기준): DAILY 더 작고 얇게 */
 .subTitle{
-  font-size:22px;
-  font-weight:400;
-  letter-spacing:1.5px;
-  margin-bottom:20px;
-  opacity:.9;
+  font-size:20px;          /* ✅ 조금 더 작게 */
+  font-weight:350;         /* ✅ 더 얇게 */
+  letter-spacing:1.4px;
+  margin-bottom:22px;
+  opacity:.92;
 }
 
-/* SINGLE & GUIDE 강조 */
+/* SINGLE & GUIDE: 상품명(원두명/DRIP BAG) 더 강조 */
 .detail.single .h1,
 .detail.guide .h1{
-  font-size:20px;
-  font-weight:500;
-  opacity:.7;
+  font-size:18px;          /* ✅ 넘버는 보조 */
+  font-weight:600;
+  opacity:.65;
   margin-bottom:6px;
+  letter-spacing:2px;
 }
 
 .detail.single .subTitle,
 .detail.guide .subTitle{
-  font-size:32px;
-  font-weight:700;
-  margin-bottom:24px;
+  font-size:34px;          /* ✅ 상품명 강조 */
+  font-weight:800;
+  margin-bottom:26px;
   opacity:1;
+  letter-spacing:1px;
 }
 
+/* 설명문: 정보칩과 간격 더 벌리기 */
 .desc{
   margin-top:18px;
-  margin-bottom:34px;
+  margin-bottom:42px;      /* ✅ 기존 34 -> 42로 확대 */
   line-height:1.7;
   color:#4b4f5a;
 }
 
+/* Origin/Process/Variety 등 정보칩 라인 */
 .subline{
-  margin-top:12px;
+  margin-top:14px;         /* ✅ 살짝 더 숨쉬게 */
 }
 
 .chip{
@@ -230,3 +239,4 @@ pre{
   font-size:13px;
   line-height:1.6;
 }
+
