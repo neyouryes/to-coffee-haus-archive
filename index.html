@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>To. coffee haus | Archive</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <a class="brandMark" href="#" id="homeBtn" aria-label="To. coffee haus home">
+        <span class="tch">T.C.H</span>
+        <span class="dots" aria-hidden="true">
+          <i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i>
+        </span>
+      </a>
+      <div class="brandText">
+        <div class="name">TO. COFFEE HAUS</div>
+        <div class="tag">bean archive · recipe</div>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div class="tabs" id="tabs">
+        <button class="tab isOn" data-filter="all" type="button">ALL</button>
+        <button class="tab" data-filter="blend" type="button">BLEND</button>
+        <button class="tab" data-filter="single" type="button">SINGLE</button>
+        <button class="tab" data-filter="guide" type="button">GUIDE</button>
+      </div>
+
+      <input id="q" class="search" placeholder="검색 (이름/국가/노트)" autocomplete="off" />
+    </div>
+  </header>
+
+  <main class="main">
+    <section id="listView" class="panel">
+      <div class="panelHead">
+        <div class="panelTitle">Select</div>
+        <div class="panelMeta"><span id="countTxt">12</span> items</div>
+      </div>
+
+      <div class="list" id="itemList" role="list"></div>
+
+      <footer class="foot">© To. coffee haus</footer>
+    </section>
+
+    <section id="detailView" class="panel hidden">
+      <div class="detailTop">
+        <button class="back" id="backBtn" type="button">← Back</button>
+        <div class="crumb"><span>Archive</span> · <span id="crumbName">Item</span></div>
+      </div>
+
+      <div id="detail" class="detail"></div>
+
+      <footer class="foot">© To. coffee haus</footer>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+:root{
+  --navy:#182E57;
+  --ink:#0E1627;
+  --ivory:#F4F1EA;
+  --paper:#FAF8F3;
+  --line:rgba(14,22,39,.14);
+  --muted:rgba(14,22,39,.62);
+  --soft:rgba(24,46,87,.08);
+  --shadow: 0 10px 30px rgba(14,22,39,.08);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background: linear-gradient(180deg, var(--paper), var(--ivory));
+  color:var(--ink);
+  font-family: -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  letter-spacing:.1px;
+}
+
+.header{
+  position:sticky; top:0; z-index:10;
+  backdrop-filter: blur(10px);
+  background: rgba(250,248,243,.72);
+  border-bottom:1px solid var(--line);
+  padding:14px 14px 12px;
+}
+
+.brand{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+}
+
+.brandMark{
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none; color:inherit;
+}
+
+.tch{
+  font-weight:700;
+  letter-spacing:.28em;
+  font-size:14px;
+  color:var(--navy);
+}
+
+.brandText{ display:flex; flex-direction:column; gap:2px; margin-left:2px; }
+.name{ font-size:12px; letter-spacing:.24em; }
+.tag{ font-size:11px; color:var(--muted); letter-spacing:.08em; }
+
+.tools{ margin-top:10px; display:grid; gap:10px; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+.tab{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.45);
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:11px;
+  letter-spacing:.12em;
+  cursor:pointer;
+}
+.tab.isOn{
+  border-color: rgba(24,46,87,.28);
+  color: var(--navy);
+  box-shadow: 0 0 0 4px rgba(24,46,87,.06);
+}
+
+.search{
+  width:100%;
+  padding:12px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.55);
+  outline:none;
+  color:var(--ink);
+}
+.search:focus{
+  border-color: rgba(24,46,87,.28);
+  box-shadow: 0 0 0 4px rgba(24,46,87,.08);
+}
+
+.main{ max-width:980px; margin:0 auto; padding:14px 14px 40px; }
+.panel{
+  background:rgba(255,255,255,.35);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.panelHead{
+  display:flex; align-items:baseline; justify-content:space-between;
+  padding:14px 14px 10px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.22);
+}
+.panelTitle{
+  font-size:12px;
+  letter-spacing:.18em;
+  color:var(--navy);
+  text-transform:uppercase;
+}
+.panelMeta{ font-size:11px; color:var(--muted); }
+
+.list{ display:flex; flex-direction:column; }
+
+.item{
+  display:grid;
+  grid-template-columns: 58px 1fr auto;
+  gap:12px;
+  padding:14px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  background:transparent;
+  transition: background .18s ease;
+}
+.item:hover{ background: var(--soft); }
+.item:last-child{ border-bottom:0; }
+
+.no{
+  font-size:12px;
+  letter-spacing:.22em;
+  color:rgba(24,46,87,.72);
+  padding-top:2px;
+}
+
+.title{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+.title .mainT{
+  font-size:14px;
+  font-weight:700;
+  line-height:1.2;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.title .subT{
+  font-size:12px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.badgeCol{ display:flex; align-items:center; gap:8px; }
+.badge{
+  font-size:11px;
+  color:var(--navy);
+  border:1px solid rgba(24,46,87,.22);
+  background:rgba(255,255,255,.35);
+  padding:6px 10px;
+  border-radius:999px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.badge.dim{ color:rgba(14,22,39,.45); border-color: var(--line); }
+.chev{ color:rgba(14,22,39,.35); font-size:16px; }
+
+.hidden{ display:none; }
+
+.detailTop{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.22);
+}
+.back{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.45);
+  color:var(--ink);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+}
+.crumb{ font-size:11px; color:var(--muted); letter-spacing:.08em; }
+
+.detail{ padding:14px; display:grid; gap:14px; }
+
+.card{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.42);
+  border-radius:16px;
+  padding:14px;
+}
+
+.h1{ margin:0 0 6px; font-size:18px; letter-spacing:.02em; }
+.desc{ margin:10px 0 0; font-size:12px; color:var(--muted); line-height:1.7; }
+
+.subline{
+  display:flex; flex-wrap:wrap; gap:8px;
+  margin-top:10px;
+}
+.chip{
+  font-size:11px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.35);
+  padding:6px 10px;
+  border-radius:999px;
+}
+.sectionTitle{
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--navy);
+  margin:0 0 10px;
+}
+
+pre{
+  margin:0;
+  white-space:pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size:12px;
+  line-height:1.55;
+  color:rgba(14,22,39,.82);
+  background:rgba(255,255,255,.35);
+  border:1px solid var(--line);
+  padding:12px;
+  border-radius:14px;
+}
+
+/* YouTube thumbnail -> click to play (placeholder until you add video_id) */
+.yt-wrap{ width:100%; aspect-ratio:16/9; position:relative; }
+.yt-thumb{
+  width:100%; height:100%;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:0;
+  background:rgba(255,255,255,.2);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+.yt-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.yt-overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(14,22,39,.0), rgba(14,22,39,.18)); }
+.yt-playDot{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:10px; height:10px; border-radius:50%;
+  background:rgba(244,241,234,.92);
+  box-shadow: 0 0 0 10px rgba(24,46,87,.10);
+}
+.yt-caption{
+  position:absolute; left:12px; bottom:12px;
+  font-size:11px; letter-spacing:.12em;
+  color:rgba(244,241,234,.92);
+  text-transform:uppercase;
+}
+.yt-wrap iframe{ width:100%; height:100%; border:0; border-radius:16px; }
+
+.foot{
+  padding:12px 14px;
+  border-top:1px solid var(--line);
+  background:rgba(255,255,255,.18);
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:.08em;
+}
+
+/* Dot logo animation */
+.dots{ display:inline-flex; gap:6px; margin-left:6px; transform: translateY(1px); }
+.dot{
+  width:4px; height:4px; border-radius:50%;
+  background: rgba(24,46,87,.70);
+  opacity:.45;
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+.dot:nth-child(2){ animation-delay:.25s; opacity:.30; }
+.dot:nth-child(3){ animation-delay:.50s; opacity:.55; }
+.dot:nth-child(4){ animation-delay:.75s; opacity:.28; }
+.dot:nth-child(5){ animation-delay:1.00s; opacity:.48; }
+
+@keyframes twinkle{
+  0%, 100% { transform:scale(1); opacity:.30; }
+  45% { transform:scale(1.6); opacity:.92; }
+  70% { transform:scale(1.1); opacity:.55; }
+}
+@media (prefers-reduced-motion: reduce){
+  .dot{ animation:none; }
+}
+[
+  {
+    "id": "blend-no1-daily",
+    "type": "blend",
+    "no": "NO.1",
+    "name": "DAILY",
+    "desc": "가볍고 산뜻한 고소함.\n마시기 편안한 데일리 블렌드.",
+    "cup_note": ["Cashew", "Caramel", "Milk Chocolate"],
+    "origin": ["Brazil", "Guatemala", "Ethiopia"],
+    "roast": "Medium",
+    "cold_brew": true
+  },
+  {
+    "id": "blend-no2-signature",
+    "type": "blend",
+    "no": "NO.2",
+    "name": "SIGNATURE BLEND",
+    "desc": "레드와인을 닮은 버건디 톤의 우아하고 묵직한 블렌드.\n깊이 있는 과일 향과 진득한 단맛이 길게 이어집니다.",
+    "cup_note": ["Kyoho Grape", "Dried Plum", "Red Wine", "Syrup"],
+    "origin": ["Tanzania", "Guatemala", "Ethiopia"],
+    "roast": "Medium",
+    "cold_brew": true
+  },
+  {
+    "id": "blend-no3-sweetness",
+    "type": "blend",
+    "no": "NO.3",
+    "name": "SWEETNESS BLEND",
+    "desc": "티라미수를 연상시키는 크리미함과\n달콤쌉싸름한 디저트 감각의 블렌드.",
+    "cup_note": ["Tiramisu", "Digestive Cookie", "Oatmeal"],
+    "origin": ["Brazil", "Guatemala", "Colombia"],
+    "roast": "Medium-Dark",
+    "cold_brew": false
+  },
+  {
+    "id": "blend-no4-dark",
+    "type": "blend",
+    "no": "NO.4",
+    "name": "DARK BLEND",
+    "desc": "섬세한 블랙의 부드러운 카리스마.\n묵직하지만 거칠지 않은 다크 블렌드.",
+    "cup_note": ["Dark Chocolate", "Roasted Walnut", "Long Finish"],
+    "origin": ["Brazil", "Colombia"],
+    "roast": "Dark",
+    "cold_brew": false
+  },
+  {
+    "id": "blend-no5-decaf",
+    "type": "blend",
+    "no": "NO.5",
+    "name": "DECAFFEINE BLEND",
+    "desc": "홍시를 닮은 달콤함.\n밤에도 부담 없이 즐길 수 있는 휴식 같은 커피.",
+    "cup_note": ["Persimmon", "Caramel", "Popcorn", "Juicy"],
+    "origin": ["Brazil", "Ethiopia"],
+    "roast": "Medium",
+    "cold_brew": true
+  },
+
+  {
+    "id": "single-colombia-el-encanto-aji-bourbon-natural",
+    "type": "single",
+    "name": "Colombia Finca El Encanto",
+    "sub": "Aji Bourbon · Natural",
+    "desc": "구슬 아이스크림과 바나나 스플릿을 떠올리게 하는\n달콤한 디저트 싱글 오리진.",
+    "origin": ["Colombia"],
+    "process": "Natural",
+    "variety": "Aji Bourbon",
+    "cup_note": ["Banana", "Strawberry", "Milk Chocolate"],
+    "roast": "Light",
+    "espresso_profile": "default"
+  },
+  {
+    "id": "single-ethiopia-aricha-gedeb-heirloom-natural",
+    "type": "single",
+    "name": "Ethiopia Aricha Gedeb",
+    "sub": "Heirloom · Natural",
+    "desc": "블랙베리와 체리의 어두운 산미,\n밀키한 초콜릿의 부드러움이 균형을 이룹니다.",
+    "origin": ["Ethiopia"],
+    "process": "Natural",
+    "variety": "Heirloom",
+    "cup_note": ["Blackberry", "Cherry", "Milk Chocolate"],
+    "roast": "Light",
+    "espresso_profile": "ethiopia"
+  },
+
+  {
+    "id": "single-coming-soon-03",
+    "type": "single",
+    "name": "Single Origin 03",
+    "sub": "Coming soon",
+    "desc": "Details will be updated.",
+    "coming_soon": true
+  },
+  {
+    "id": "single-coming-soon-04",
+    "type": "single",
+    "name": "Single Origin 04",
+    "sub": "Coming soon",
+    "desc": "Details will be updated.",
+    "coming_soon": true
+  },
+  {
+    "id": "single-coming-soon-05",
+    "type": "single",
+    "name": "Single Origin 05",
+    "sub": "Coming soon",
+    "desc": "Details will be updated.",
+    "coming_soon": true
+  },
+
+  {
+    "id": "guide-dripbag",
+    "type": "guide",
+    "name": "DRIP BAG",
+    "sub": "1 Bag · 11g",
+    "desc": "10ea box · brew guide"
+  },
+  {
+    "id": "guide-coldbrew",
+    "type": "guide",
+    "name": "COLD BREW",
+    "sub": "No.1 · No.2 · No.5",
+    "desc": "serve guide"
+  }
+]
+let ITEMS = [];
+let activeFilter = "all";
+
+const $ = (s)=>document.querySelector(s);
+
+const listView = $("#listView");
+const detailView = $("#detailView");
+const itemList = $("#itemList");
+const detail = $("#detail");
+const q = $("#q");
+const backBtn = $("#backBtn");
+const homeBtn = $("#homeBtn");
+const countTxt = $("#countTxt");
+const crumbName = $("#crumbName");
+const tabs = $("#tabs");
+
+function escapeHtml(str=""){
+  return String(str).replace(/[&<>"']/g, m => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[m]));
+}
+
+function setActiveTab(name){
+  activeFilter = name;
+  tabs.querySelectorAll(".tab").forEach(btn=>{
+    btn.classList.toggle("isOn", btn.dataset.filter === name);
+  });
+  renderList();
+}
+
+function route(){
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+  if(id) showDetail(id);
+  else showList();
+}
+
+function showList(){
+  listView.classList.remove("hidden");
+  detailView.classList.add("hidden");
+  renderList();
+}
+
+function showDetail(id){
+  listView.classList.add("hidden");
+  detailView.classList.remove("hidden");
+  renderDetail(id);
+}
+
+function goList(){
+  history.pushState({}, "", location.pathname);
+  showList();
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function goDetail(id){
+  history.pushState({}, "", `?id=${encodeURIComponent(id)}`);
+  showDetail(id);
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function itemLabel(it){
+  if(it.type === "blend") return "BLEND";
+  if(it.type === "single") return "SINGLE";
+  return "GUIDE";
+}
+
+function listNo(it, idx){
+  if(it.type === "blend" && it.no) return it.no;
+  if(it.type === "guide") return "GUIDE";
+  return String(idx + 1).padStart(2,"0");
+}
+
+function matchesSearch(it, keyword){
+  if(!keyword) return true;
+  const hay = [
+    it.no, it.name, it.sub, it.desc,
+    (it.origin||[]).join(" "),
+    it.process, it.variety,
+    (it.cup_note||[]).join(" "),
+    it.roast
+  ].filter(Boolean).join(" ").toLowerCase();
+  return hay.includes(keyword);
+}
+
+function renderList(){
+  const keyword = (q.value||"").toLowerCase().trim();
+
+  let filtered = ITEMS.filter(it=>{
+    if(activeFilter === "all") return true;
+    return it.type === activeFilter;
+  }).filter(it=>matchesSearch(it, keyword));
+
+  countTxt.textContent = String(filtered.length);
+
+  itemList.innerHTML = filtered.map((it, idx)=>{
+    const no = escapeHtml(listNo(it, idx));
+    const title = it.type === "blend"
+      ? `${escapeHtml(it.name)}`
+      : `${escapeHtml(it.name)}`;
+
+    const sub = it.type === "blend"
+      ? escapeHtml((it.origin||[]).join(" · "))
+      : escapeHtml(it.sub || ((it.origin||[]).join(" · ") || ""));
+
+    const badge = itemLabel(it);
+    const dim = it.coming_soon ? " dim" : "";
+    const right = it.coming_soon ? "…" : "›";
+
+    return `
+      <div class="item" role="listitem" data-id="${escapeHtml(it.id)}">
+        <div class="no">${no}</div>
+        <div class="title">
+          <div class="mainT">${title}</div>
+          <div class="subT">${sub}</div>
+        </div>
+        <div class="badgeCol">
+          <span class="badge${dim}">${badge}</span>
+          <span class="chev">${right}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  itemList.querySelectorAll(".item").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const id = el.dataset.id;
+      goDetail(id);
+    });
+  });
+}
+
+/* Recipes (fixed by your specs) */
+const RECIPES = {
+  blend_filter: {
+    water_temp: "88°C",
+    hot: {
+      dose: "20g",
+      total: "300g",
+      pours: "30g (Bloom) → 90g → 170g → 20g",
+      add: "가수 10–20g",
+      time: "2:40"
+    },
+    ice: {
+      dose: "20g",
+      total: "200g",
+      pours: "30g (Bloom) → 40g → 110g → 20g",
+      note: "얼음 칠링",
+      time: "2:20"
+    }
+  },
+  blend_espresso: {
+    "no12": { basket:"IMS 18g", dose:"16.8g", yield:"35g", time:"25–28s", temp:"93°C" },
+    "no34": { basket:"IMS 18g", dose:"17g",   yield:"35g", time:"29–32s", temp:"93°C" },
+    "no5":  { basket:"IMS 18g", dose:"17g",   yield:"38g", time:"33–35s", temp:"93°C" }
+  },
+  single_filter: {
+    water_temp: "90°C",
+    hot: {
+      dose: "20g",
+      total: "300ml",
+      pours: "30g → 90g → 170g → 20g",
+      add: "가수 10–20g",
+      time: "2:30"
+    },
+    ice: {
+      dose: "20g",
+      total: "200ml",
+      pours: "30g → 50g → 100g → 20g",
+      time: "2:30"
+    }
+  },
+  single_espresso: {
+    ethiopia: { basket:"IMS 18g", dose:"16.8g", yield:"47g", time:"38–40s", temp:"93°C" },
+    default:  { basket:"IMS 18g", dose:"17.5g", yield:"50g", time:"40–43s", temp:"93°C" }
+  },
+  dripbag_guide: {
+    hot: {
+      temp:"90°C", total:"180g",
+      pours:"0:00 20g (Bloom) → 0:30 80g → 1:00 140g → 1:20 180g",
+      time:"1:30–1:40"
+    },
+    ice: {
+      temp:"90°C", total:"110g",
+      pours:"0:00 20g (Bloom) → 0:30 65g → 1:00 110g",
+      note:"추출 후 얼음 110g 넣고 저어 마시기",
+      time:"1:30–1:40"
+    }
+  },
+  coldbrew_guide: {
+    lines: ["80g concentrate", "120g water", "Total 200g"]
+  }
+};
+
+function createYouTubeThumb(videoId){
+  // You can add video_id later to any item; until then it shows "Coming soon" instead.
+  return `
+    <div class="yt-wrap" data-video="${escapeHtml(videoId)}">
+      <button class="yt-thumb" type="button" aria-label="Play recipe video">
+        <img src="https://i.ytimg.com/vi/${escapeHtml(videoId)}/hqdefault.jpg" alt="Recipe video thumbnail">
+        <div class="yt-overlay"></div>
+        <div class="yt-playDot" aria-hidden="true"></div>
+        <div class="yt-caption">recipe</div>
+      </button>
+    </div>
+  `;
+}
+
+function renderDetail(id){
+  const it = ITEMS.find(x=>x.id===id);
+  if(!it){
+    crumbName.textContent = "Not found";
+    detail.innerHTML = `<div class="card"><p>항목을 찾을 수 없어요.</p></div>`;
+    return;
+  }
+
+  crumbName.textContent = it.type === "blend" ? `${it.no} ${it.name}` : it.name;
+
+  const chips = [];
+  if(it.type === "blend"){
+    if(it.roast) chips.push(`Roast: ${it.roast}`);
+    if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
+  } else if(it.type === "single"){
+    if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
+    if(it.process) chips.push(`Process: ${it.process}`);
+    if(it.variety) chips.push(`Variety: ${it.variety}`);
+    if(it.roast) chips.push(`Roast: ${it.roast}`);
+  } else {
+    // guide
+    if(it.sub) chips.push(it.sub);
+  }
+
+  const chipHtml = chips.map(x=>`<span class="chip">${escapeHtml(x)}</span>`).join("");
+  const noteHtml = (it.cup_note||[]).map(n=>`<span class="chip">${escapeHtml(n)}</span>`).join("");
+
+  const title = (it.type === "blend")
+    ? `${escapeHtml(it.no)}<br>${escapeHtml(it.name)}`
+    : escapeHtml(it.name);
+
+  const subtitle = it.sub ? `<div class="desc" style="margin-top:6px;color:var(--navy);letter-spacing:.08em;">${escapeHtml(it.sub)}</div>` : "";
+
+  const desc = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
+
+  const videoBlock = it.video_id
+    ? `<div class="card"><div class="sectionTitle">Video</div>${createYouTubeThumb(it.video_id)}</div>`
+    : `<div class="card"><div class="sectionTitle">Video</div><pre>Coming soon</pre></div>`;
+
+  let recipeBlocks = "";
+
+  if(it.type === "blend"){
+    const f = RECIPES.blend_filter;
+    let esp;
+    if(it.no === "NO.1" || it.no === "NO.2") esp = RECIPES.blend_espresso.no12;
+    else if(it.no === "NO.3" || it.no === "NO.4") esp = RECIPES.blend_espresso.no34;
+    else esp = RECIPES.blend_espresso.no5;
+
+    const cold = it.cold_brew
+      ? `<div class="card">
+           <div class="sectionTitle">Cold Brew</div>
+           <pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre>
+         </div>`
+      : "";
+
+    recipeBlocks = `
+      <div class="card">
+        <div class="sectionTitle">Filter</div>
+        <pre>Water Temp ${f.water_temp}
+
+HOT
+Dose ${f.hot.dose}
+Total ${f.hot.total}
+${f.hot.pours}
+${f.hot.add}
+Time ${f.hot.time}
+
+ICE
+Dose ${f.ice.dose}
+Total ${f.ice.total}
+${f.ice.pours}
+${f.ice.note}
+Time ${f.ice.time}</pre>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">Espresso</div>
+        <pre>${esp.basket} Basket
+Dose ${esp.dose}
+Yield ${esp.yield}
+Time ${esp.time}
+Water Temp ${esp.temp}</pre>
+      </div>
+
+      ${cold}
+    `;
+  }
+
+  if(it.type === "single"){
+    if(it.coming_soon){
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Recipe</div>
+          <pre>Coming soon</pre>
+        </div>
+      `;
+    } else {
+      const f = RECIPES.single_filter;
+      const esp = RECIPES.single_espresso[it.espresso_profile || "default"] || RECIPES.single_espresso.default;
+
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Filter</div>
+          <pre>Water Temp ${f.water_temp}
+
+HOT
+Dose ${f.hot.dose}
+Total ${f.hot.total}
+${f.hot.pours}
+${f.hot.add}
+Time ${f.hot.time}
+
+ICE
+Dose ${f.ice.dose}
+Total ${f.ice.total}
+${f.ice.pours}
+Time ${f.ice.time}</pre>
+        </div>
+
+        <div class="card">
+          <div class="sectionTitle">Espresso</div>
+          <pre>${esp.basket} Basket
+Dose ${esp.dose}
+Yield ${esp.yield}
+Time ${esp.time}
+Water Temp ${esp.temp}</pre>
+        </div>
+      `;
+    }
+  }
+
+  if(it.type === "guide"){
+    if(it.id === "guide-dripbag"){
+      const g = RECIPES.dripbag_guide;
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Drip Bag</div>
+          <pre>HOT
+${g.hot.temp}
+Total ${g.hot.total}
+${g.hot.pours}
+Time ${g.hot.time}
+
+ICE
+${g.ice.temp}
+Total ${g.ice.total}
+${g.ice.pours}
+${g.ice.note}
+Time ${g.ice.time}</pre>
+        </div>
+      `;
+    }
+    if(it.id === "guide-coldbrew"){
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Cold Brew</div>
+          <pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre>
+        </div>
+      `;
+    }
+  }
+
+  const cupNoteBlock = (it.cup_note && it.cup_note.length)
+    ? `<div class="card">
+         <div class="sectionTitle">Cup Note</div>
+         <div class="subline">${noteHtml}</div>
+       </div>`
+    : "";
+
+  detail.innerHTML = `
+    <div class="card">
+      <h2 class="h1">${title}</h2>
+      ${subtitle}
+      ${desc}
+      ${chipHtml ? `<div class="subline">${chipHtml}</div>` : ``}
+    </div>
+
+    ${cupNoteBlock}
+
+    ${videoBlock}
+
+    ${recipeBlocks}
+  `;
+}
+
+/* Click thumb -> play inside page */
+document.addEventListener("click", (e)=>{
+  const wrap = e.target.closest(".yt-wrap");
+  if(!wrap) return;
+  if(wrap.querySelector("iframe")) return;
+
+  const id = wrap.dataset.video;
+  wrap.innerHTML = `
+    <iframe
+      src="https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      title="Recipe video">
+    </iframe>
+  `;
+});
+
+async function init(){
+  const res = await fetch("items.json", { cache:"no-store" });
+  ITEMS = await res.json();
+
+  q.addEventListener("input", renderList);
+  backBtn.addEventListener("click", goList);
+  homeBtn.addEventListener("click", (e)=>{ e.preventDefault(); goList(); });
+
+  tabs.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".tab");
+    if(!btn) return;
+    setActiveTab(btn.dataset.filter);
+  });
+
+  window.addEventListener("popstate", route);
+  route();
+}
+
+init();
