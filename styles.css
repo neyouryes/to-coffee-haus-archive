@@ -361,32 +361,70 @@ pre{
   border: 1px solid rgba(30,43,85,.10);
 }
 
-/* Roast */
+/* ================= Roast (graphic UI) ================= */
+
 .roastWrap{ margin-top: 14px; }
-.roastRow{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+
+.roastRow{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+}
+
 .roastLabel{
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: .20em;
   color: rgba(100,116,139,.85);
+  white-space: nowrap;
+  padding-top: 2px;
 }
+
+/* ✅ 바와 LMD를 같은 폭으로 묶기 */
+.roastStack{
+  flex:1;
+  display:grid;
+  gap:8px;
+}
+
 .roastBar{
   position:relative;
-  flex:1;
-  height: 10px;
+  height: 12px;
   border-radius: 999px;
-  background: rgba(15,23,42,.06);
-  border: 1px solid rgba(15,23,42,.08);
+  background: rgba(15,23,42,.055);
+  border: 1px solid rgba(15,23,42,.10);
+  overflow:hidden;
 }
+
+/* ✅ 5분할 틱(얇은 기준선) */
+.roastTicks{
+  position:absolute;
+  inset:0;
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.roastTicks i{
+  display:block;
+  border-right: 1px solid rgba(15,23,42,.07);
+}
+
+.roastTicks i:last-child{
+  border-right:none;
+}
+
 .roastDot{
   position:absolute;
   top:50%;
-  width:10px;height:10px;
+  width:10px;
+  height:10px;
   border-radius:50%;
   transform: translate(-50%,-50%);
-  background: rgba(30,43,85,.85);
+  background: rgba(30,43,85,.88);
   box-shadow: 0 0 0 4px rgba(30,43,85,.10);
 }
+
 .roastMarks{
   display:flex;
   justify-content:space-between;
@@ -394,8 +432,12 @@ pre{
   font-size: 11px;
   letter-spacing: .18em;
   color: rgba(100,116,139,.78);
-  margin-top: 8px;
+  margin:0;
+  padding:0;
 }
+
+.roastMarks .mid{ opacity:.9; }
+
 
 /* Video */
 .yt-wrap{ position:relative; }
