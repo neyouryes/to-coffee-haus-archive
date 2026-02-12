@@ -1,93 +1,443 @@
-[
-  {
-    "id": "blend-no1-daily",
-    "type": "blend",
-    "no": "NO.1",
-    "name": "DAILY",
-    "desc": "가볍고 산뜻한 고소함.\n마시기 편안한 데일리 블렌드.",
-    "cup_note": ["Cashew", "Caramel", "Milk Chocolate"],
-    "origin": ["Brazil", "Guatemala", "Ethiopia"],
-    "roast": "Medium",
-    "cold_brew": true
-  },
-  {
-    "id": "blend-no2-signature",
-    "type": "blend",
-    "no": "NO.2",
-    "name": "SIGNATURE BLEND",
-    "desc": "레드와인을 닮은 버건디 톤의 우아하고 묵직한 블렌드.\n깊이 있는 과일 향과 진득한 단맛이 길게 이어집니다.",
-    "cup_note": ["Kyoho Grape", "Dried Plum", "Red Wine", "Syrup"],
-    "origin": ["Tanzania", "Guatemala", "Ethiopia"],
-    "roast": "Medium",
-    "cold_brew": true
-  },
-  {
-    "id": "blend-no3-sweetness",
-    "type": "blend",
-    "no": "NO.3",
-    "name": "SWEETNESS BLEND",
-    "desc": "티라미수를 연상시키는 크리미함과\n달콤쌉싸름한 디저트 감각의 블렌드.",
-    "cup_note": ["Tiramisu", "Digestive Cookie", "Oatmeal"],
-    "origin": ["Brazil", "Guatemala", "Colombia"],
-    "roast": "Medium-Dark",
-    "cold_brew": false
-  },
-  {
-    "id": "blend-no4-dark",
-    "type": "blend",
-    "no": "NO.4",
-    "name": "DARK BLEND",
-    "desc": "섬세한 블랙의 부드러운 카리스마.\n묵직하지만 거칠지 않은 다크 블렌드.",
-    "cup_note": ["Dark Chocolate", "Roasted Walnut", "Long Finish"],
-    "origin": ["Brazil", "Colombia"],
-    "roast": "Dark",
-    "cold_brew": false
-  },
-  {
-    "id": "blend-no5-decaf",
-    "type": "blend",
-    "no": "NO.5",
-    "name": "DECAFFEINE BLEND",
-    "desc": "홍시를 닮은 달콤함.\n밤에도 부담 없이 즐길 수 있는 휴식 같은 커피.",
-    "cup_note": ["Persimmon", "Caramel", "Popcorn", "Juicy"],
-    "origin": ["Brazil", "Ethiopia"],
-    "roast": "Medium",
-    "cold_brew": true
-  },
+let ITEMS = [];
+let activeFilter = "all";
 
-  {
-    "id": "single-colombia-el-encanto-aji-bourbon-natural",
-    "type": "single",
-    "no": "S.1",
-    "name": "Colombia Finca El Encanto",
-    "sub": "Aji Bourbon · Natural",
-    "desc": "구슬 아이스크림과 바나나 스플릿을 떠올리게 하는\n달콤한 디저트 싱글 오리진.",
-    "origin": ["Colombia"],
-    "process": "Natural",
-    "variety": "Aji Bourbon",
-    "cup_note": ["Banana", "Strawberry", "Milk Chocolate"],
-    "roast": "Light",
-    "espresso_profile": "default"
-  },
-  {
-    "id": "single-ethiopia-aricha-gedeb-heirloom-natural",
-    "type": "single",
-    "no": "S.2",
-    "name": "Ethiopia Aricha Gedeb",
-    "sub": "Heirloom · Natural",
-    "desc": "블랙베리와 체리의 어두운 산미,\n밀키한 초콜릿의 부드러움이 균형을 이룹니다.",
-    "origin": ["Ethiopia"],
-    "process": "Natural",
-    "variety": "Heirloom",
-    "cup_note": ["Blackberry", "Cherry", "Milk Chocolate"],
-    "roast": "Light",
-    "espresso_profile": "ethiopia"
-  },
+const $ = (s)=>document.querySelector(s);
 
-  { "id": "single-coming-soon-03", "type": "single", "no": "S.3", "name": "Single Origin 03", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
-  { "id": "single-coming-soon-04", "type": "single", "no": "S.4", "name": "Single Origin 04", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
-  { "id": "single-coming-soon-05", "type": "single", "no": "S.5", "name": "Single Origin 05", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+const header = document.querySelector(".header");
+const listView = $("#listView");
+const detailView = $("#detailView");
+const itemList = $("#itemList");
+const detail = $("#detail");
+const q = $("#q");
+const backBtn = $("#backBtn");
+const homeBtn = $("#homeBtn");
+const countTxt = $("#countTxt");
+const crumbName = $("#crumbName");
+const tabs = $("#tabs");
 
-  { "id": "guide-dripbag", "type": "guide", "name": "DRIP BAG", "sub": "1 Bag · 11g", "desc": "10ea box · brew guide" },
-  { "id": "guide-coldbrew", "type": "guide", "name": "COLD BREW", "sub": "No.1 · No.2 · No.5", "desc": "serve guide" }
-]
+function escapeHtml(str=""){
+  return String(str).replace(/[&<>"']/g, m => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[m]));
+}
+
+/* 검색 정규화(한글/띄어쓰기/기호 차이 흡수) */
+function normalizeText(s=""){
+  return String(s)
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/\s+/g, "")
+    .replace(/[·•,\-_.:;()|[\]{}]/g, "");
+}
+
+function setActiveTab(name){
+  activeFilter = name;
+  tabs.querySelectorAll(".tab").forEach(btn=>{
+    btn.classList.toggle("isOn", btn.dataset.filter === name);
+  });
+  renderList();
+}
+
+function route(){
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+  if(id) showDetail(id);
+  else showList();
+}
+
+function showList(){
+  listView.classList.remove("hidden");
+  detailView.classList.add("hidden");
+  renderList();
+}
+
+function showDetail(id){
+  listView.classList.add("hidden");
+  detailView.classList.remove("hidden");
+  renderDetail(id);
+}
+
+function goList(){
+  history.pushState({}, "", location.pathname);
+  showList();
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function goDetail(id){
+  history.pushState({}, "", `?id=${encodeURIComponent(id)}`);
+  showDetail(id);
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function itemLabel(it){
+  if(it.type === "blend") return "BLEND";
+  if(it.type === "single") return "SINGLE";
+  return "GUIDE";
+}
+
+function listNo(it, idx){
+  if((it.type === "blend" || it.type === "single") && it.no) return it.no;
+  if(it.type === "guide") return "GUIDE";
+  return String(idx + 1).padStart(2,"0");
+}
+
+/* ✅ kw 기반 한글 검색 (화면은 영어 유지) */
+function matchesSearch(it, keyword){
+  const k = normalizeText(keyword || "");
+  if(!k) return true;
+
+  const hay = normalizeText([
+    it.no, it.name, it.sub, it.desc,
+    it.kw,                    // ✅ 보이지 않는 한글 키워드
+    (it.origin||[]).join(" "),
+    it.process, it.variety,
+    (it.cup_note||[]).join(" "),
+    it.roast
+  ].filter(Boolean).join(" "));
+
+  return hay.includes(k);
+}
+
+/* No Result 미니멀 메시지 */
+function renderEmpty(){
+  itemList.innerHTML = `
+    <div class="empty">
+      <div class="emptyBox">
+        <div class="emptyTitle">No Result — To. coffee haus</div>
+        <p class="emptySub">Try another keyword. (ex. 콜롬비아 · 에티오피아 · 디카페인 · 드립백 · 콜드브루)</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderList(){
+  const keyword = (q.value||"").trim();
+
+  let filtered = ITEMS
+    .filter(it => activeFilter === "all" ? true : it.type === activeFilter)
+    .filter(it => matchesSearch(it, keyword));
+
+  countTxt.textContent = String(filtered.length);
+
+  if(filtered.length === 0){
+    renderEmpty();
+    return;
+  }
+
+  itemList.innerHTML = filtered.map((it, idx)=>{
+    const no = escapeHtml(listNo(it, idx));
+    const title = escapeHtml(it.name);
+
+    const sub = it.type === "blend"
+      ? escapeHtml((it.origin||[]).join(" · "))
+      : escapeHtml(it.sub || ((it.origin||[]).join(" · ") || ""));
+
+    const badge = itemLabel(it);
+    const dim = it.coming_soon ? " dim" : "";
+    const right = it.coming_soon ? "…" : "›";
+
+    return `
+      <div class="item" role="listitem" data-id="${escapeHtml(it.id)}">
+        <div class="no">${no}</div>
+        <div class="title">
+          <div class="mainT">${title}</div>
+          <div class="subT">${sub}</div>
+        </div>
+        <div class="badgeCol">
+          <span class="badge${dim}">${badge}</span>
+          <span class="chev">${right}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  itemList.querySelectorAll(".item").forEach(el=>{
+    el.addEventListener("click", ()=> goDetail(el.dataset.id));
+  });
+}
+
+/* Recipes (네 스펙 고정) */
+const RECIPES = {
+  blend_filter: {
+    water_temp: "88°C",
+    hot: { dose:"20g", total:"300g", pours:"30g (Bloom) → 90g → 170g → 20g", add:"가수 10–20g", time:"2:40" },
+    ice: { dose:"20g", total:"200g", pours:"30g (Bloom) → 40g → 110g → 20g", note:"얼음 칠링", time:"2:20" }
+  },
+  blend_espresso: {
+    "no12": { basket:"IMS 18g", dose:"16.8g", yield:"35g", time:"25–28s", temp:"93°C" },
+    "no34": { basket:"IMS 18g", dose:"17g",   yield:"35g", time:"29–32s", temp:"93°C" },
+    "no5":  { basket:"IMS 18g", dose:"17g",   yield:"38g", time:"33–35s", temp:"93°C" }
+  },
+  single_filter: {
+    water_temp: "90°C",
+    hot: { dose:"20g", total:"300ml", pours:"30g → 90g → 170g → 20g", add:"가수 10–20g", time:"2:30" },
+    ice: { dose:"20g", total:"200ml", pours:"30g → 50g → 100g → 20g", time:"2:30" }
+  },
+  single_espresso: {
+    ethiopia: { basket:"IMS 18g", dose:"16.8g", yield:"47g", time:"38–40s", temp:"93°C" },
+    default:  { basket:"IMS 18g", dose:"17.5g", yield:"50g", time:"40–43s", temp:"93°C" }
+  },
+  dripbag_guide: {
+    hot: { temp:"90°C", total:"180g", pours:"Bloom 20g 포함 · 총 4회 나눔 (총량 180g)", time:"1:30–1:40" },
+    ice: { temp:"90°C", total:"110g", pours:"첫 물 20g (Bloom) + 3번 나눔 (총량 110g)", note:"추출 후 얼음 110g 넣고 저어 마시기", time:"1:30–1:40" }
+  },
+  coldbrew_guide: { lines: ["80g concentrate", "120g water", "Total 200g"] }
+};
+
+/* Roast -> position (0..1) */
+function roastLevel(roast=""){
+  const r = String(roast).toLowerCase().replace(/\s+/g,"");
+  if(r.includes("light")) return 0.22;
+  if(r.includes("medium-dark") || r.includes("mediumdark")) return 0.72;
+  if(r.includes("dark")) return 0.86;
+  if(r.includes("medium")) return 0.55;
+  return 0.55;
+}
+
+function roastBarHtml(roast){
+  if(!roast) return "";
+  const pct = Math.max(0.05, Math.min(0.95, roastLevel(roast))) * 100;
+
+  return `
+    <div class="roastWrap">
+      <div class="roastRow">
+        <div class="roastLabel">Roasting Point</div>
+        <div class="roastBar" aria-label="Roasting bar">
+          <div class="roastTicks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="roastDot" style="left:${pct}%"></div>
+        </div>
+        <div class="roastLabel">${escapeHtml(roast)}</div>
+      </div>
+      <div class="roastEnds"><span>Light</span><span>Dark</span></div>
+    </div>
+  `;
+}
+
+/* YouTube thumb */
+function createYouTubeThumb(videoId){
+  return `
+    <div class="yt-wrap" data-video="${escapeHtml(videoId)}">
+      <button class="yt-thumb" type="button" aria-label="Play recipe video">
+        <img src="https://i.ytimg.com/vi/${escapeHtml(videoId)}/hqdefault.jpg" alt="Recipe video thumbnail">
+        <div class="yt-overlay"></div>
+        <div class="yt-playDot" aria-hidden="true"></div>
+        <div class="yt-caption">recipe</div>
+      </button>
+    </div>
+  `;
+}
+
+function renderDetail(id){
+  const it = ITEMS.find(x=>x.id===id);
+  if(!it){
+    crumbName.textContent = "Not found";
+    detail.innerHTML = `<div class="card"><p>항목을 찾을 수 없어요.</p></div>`;
+    return;
+  }
+
+  crumbName.textContent = (it.no ? `${it.no} ${it.name}` : it.name);
+
+  const mainTitle = (it.type === "blend" || it.type === "single") ? escapeHtml(it.no || it.name) : escapeHtml(it.name);
+  const subTitle  = (it.type === "blend" || it.type === "single") ? escapeHtml(it.name) : escapeHtml(it.sub || "");
+  const subtitle  = subTitle ? `<div class="subTitle">${subTitle}</div>` : "";
+  const desc      = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
+
+  const chips = [];
+  if(it.type === "blend"){
+    if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
+  } else if(it.type === "single"){
+    if(it.sub) chips.push(it.sub);
+    if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
+    if(it.process) chips.push(`Process: ${it.process}`);
+    if(it.variety) chips.push(`Variety: ${it.variety}`);
+  } else {
+    if(it.sub) chips.push(it.sub);
+  }
+  const chipHtml = chips.map(x=>`<span class="chip">${escapeHtml(x)}</span>`).join("");
+  const roastGraphic = roastBarHtml(it.roast);
+
+  const noteHtml = (it.cup_note||[]).map(n=>`<span class="chip">${escapeHtml(n)}</span>`).join("");
+  const cupNoteBlock = (it.cup_note && it.cup_note.length)
+    ? `<div class="card"><div class="sectionTitle">Cup Note</div><div class="subline">${noteHtml}</div></div>`
+    : "";
+
+  const videoBlock = it.video_id
+    ? `<div class="card"><div class="sectionTitle">Video</div>${createYouTubeThumb(it.video_id)}</div>`
+    : `<div class="card"><div class="sectionTitle">Video</div><pre>Coming soon</pre></div>`;
+
+  let recipeBlocks = "";
+
+  if(it.type === "blend"){
+    const f = RECIPES.blend_filter;
+    let esp;
+    if(it.no === "NO.1" || it.no === "NO.2") esp = RECIPES.blend_espresso.no12;
+    else if(it.no === "NO.3" || it.no === "NO.4") esp = RECIPES.blend_espresso.no34;
+    else esp = RECIPES.blend_espresso.no5;
+
+    const cold = it.cold_brew
+      ? `<div class="card"><div class="sectionTitle">Cold Brew</div><pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre></div>`
+      : "";
+
+    /* Espresso 위 / Filter 아래 */
+    recipeBlocks = `
+      <div class="card">
+        <div class="sectionTitle">Espresso</div>
+        <pre>${esp.basket} Basket
+Dose ${esp.dose}
+Yield ${esp.yield}
+Time ${esp.time}
+Water Temp ${esp.temp}</pre>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">Filter</div>
+        <pre>Water Temp ${f.water_temp}
+
+HOT
+Dose ${f.hot.dose}
+Total ${f.hot.total}
+${f.hot.pours}
+${f.hot.add}
+Time ${f.hot.time}
+
+ICE
+Dose ${f.ice.dose}
+Total ${f.ice.total}
+${f.ice.pours}
+${f.ice.note}
+Time ${f.ice.time}</pre>
+      </div>
+
+      ${cold}
+    `;
+  }
+
+  if(it.type === "single"){
+    if(it.coming_soon){
+      recipeBlocks = `<div class="card"><div class="sectionTitle">Recipe</div><pre>Coming soon</pre></div>`;
+    } else {
+      const f = RECIPES.single_filter;
+      const esp = RECIPES.single_espresso[it.espresso_profile || "default"] || RECIPES.single_espresso.default;
+
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Espresso</div>
+          <pre>${esp.basket} Basket
+Dose ${esp.dose}
+Yield ${esp.yield}
+Time ${esp.time}
+Water Temp ${esp.temp}</pre>
+        </div>
+
+        <div class="card">
+          <div class="sectionTitle">Filter</div>
+          <pre>Water Temp ${f.water_temp}
+
+HOT
+Dose ${f.hot.dose}
+Total ${f.hot.total}
+${f.hot.pours}
+${f.hot.add}
+Time ${f.hot.time}
+
+ICE
+Dose ${f.ice.dose}
+Total ${f.ice.total}
+${f.ice.pours}
+Time ${f.ice.time}</pre>
+        </div>
+      `;
+    }
+  }
+
+  if(it.type === "guide"){
+    if(it.id === "guide-dripbag"){
+      const g = RECIPES.dripbag_guide;
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Drip Bag</div>
+          <pre>HOT
+${g.hot.temp}
+Total ${g.hot.total}
+${g.hot.pours}
+Time ${g.hot.time}
+
+ICE
+${g.ice.temp}
+Total ${g.ice.total}
+${g.ice.pours}
+${g.ice.note}
+Time ${g.ice.time}</pre>
+        </div>
+      `;
+    }
+    if(it.id === "guide-coldbrew"){
+      recipeBlocks = `<div class="card"><div class="sectionTitle">Cold Brew</div><pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre></div>`;
+    }
+  }
+
+  detail.innerHTML = `
+    <div class="card">
+      <h2 class="h1">${mainTitle}</h2>
+      ${subtitle}
+      ${desc}
+      ${chipHtml ? `<div class="subline">${chipHtml}</div>` : ``}
+      ${roastGraphic}
+    </div>
+
+    ${cupNoteBlock}
+    ${videoBlock}
+    ${recipeBlocks}
+  `;
+}
+
+/* Click thumb -> play */
+document.addEventListener("click", (e)=>{
+  const wrap = e.target.closest(".yt-wrap");
+  if(!wrap) return;
+  if(wrap.querySelector("iframe")) return;
+
+  const id = wrap.dataset.video;
+  wrap.innerHTML = `
+    <iframe
+      src="https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      title="Recipe video">
+    </iframe>
+  `;
+});
+
+/* Header motion: 스크롤 시 컴팩트 + 검색 포커스 애니메이션 */
+function setupHeaderMotion(){
+  const onScroll = ()=>{
+    header.classList.toggle("isCompact", window.scrollY > 8);
+  };
+  window.addEventListener("scroll", onScroll, { passive:true });
+  onScroll();
+
+  q.addEventListener("focus", ()=> header.classList.add("isSearch"));
+  q.addEventListener("blur",  ()=> header.classList.remove("isSearch"));
+}
+
+async function init(){
+  const res = await fetch("items.json", { cache:"no-store" });
+  ITEMS = await res.json();
+
+  q.addEventListener("input", renderList);
+  backBtn.addEventListener("click", goList);
+  homeBtn.addEventListener("click", (e)=>{ e.preventDefault(); goList(); });
+
+  tabs.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".tab");
+    if(!btn) return;
+    setActiveTab(btn.dataset.filter);
+  });
+
+  window.addEventListener("popstate", route);
+
+  setupHeaderMotion();
+  route();
+}
+
+init();
