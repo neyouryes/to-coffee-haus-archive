@@ -1,0 +1,91 @@
+[
+  {
+    "id": "blend-no1-daily",
+    "type": "blend",
+    "no": "NO.1",
+    "name": "DAILY",
+    "desc": "가볍고 산뜻한 고소함.\n마시기 편안한 데일리 블렌드.",
+    "cup_note": ["Cashew", "Caramel", "Milk Chocolate"],
+    "origin": ["Brazil", "Guatemala", "Ethiopia"],
+    "roast": "Medium",
+    "cold_brew": true
+  },
+  {
+    "id": "blend-no2-signature",
+    "type": "blend",
+    "no": "NO.2",
+    "name": "SIGNATURE BLEND",
+    "desc": "레드와인을 닮은 버건디 톤의 우아하고 묵직한 블렌드.\n깊이 있는 과일 향과 진득한 단맛이 길게 이어집니다.",
+    "cup_note": ["Kyoho Grape", "Dried Plum", "Red Wine", "Syrup"],
+    "origin": ["Tanzania", "Guatemala", "Ethiopia"],
+    "roast": "Medium",
+    "cold_brew": true
+  },
+  {
+    "id": "blend-no3-sweetness",
+    "type": "blend",
+    "no": "NO.3",
+    "name": "SWEETNESS BLEND",
+    "desc": "티라미수를 연상시키는 크리미함과\n달콤쌉싸름한 디저트 감각의 블렌드.",
+    "cup_note": ["Tiramisu", "Digestive Cookie", "Oatmeal"],
+    "origin": ["Brazil", "Guatemala", "Colombia"],
+    "roast": "Medium-Dark",
+    "cold_brew": false
+  },
+  {
+    "id": "blend-no4-dark",
+    "type": "blend",
+    "no": "NO.4",
+    "name": "DARK BLEND",
+    "desc": "섬세한 블랙의 부드러운 카리스마.\n묵직하지만 거칠지 않은 다크 블렌드.",
+    "cup_note": ["Dark Chocolate", "Roasted Walnut", "Long Finish"],
+    "origin": ["Brazil", "Colombia"],
+    "roast": "Dark",
+    "cold_brew": false
+  },
+  {
+    "id": "blend-no5-decaf",
+    "type": "blend",
+    "no": "NO.5",
+    "name": "DECAFFEINE BLEND",
+    "desc": "홍시를 닮은 달콤함.\n밤에도 부담 없이 즐길 수 있는 휴식 같은 커피.",
+    "cup_note": ["Persimmon", "Caramel", "Popcorn", "Juicy"],
+    "origin": ["Brazil", "Ethiopia"],
+    "roast": "Medium",
+    "cold_brew": true
+  },
+
+  {
+    "id": "single-colombia-el-encanto-aji-bourbon-natural",
+    "type": "single",
+    "name": "Colombia Finca El Encanto",
+    "sub": "Aji Bourbon · Natural",
+    "desc": "구슬 아이스크림과 바나나 스플릿을 떠올리게 하는\n달콤한 디저트 싱글 오리진.",
+    "origin": ["Colombia"],
+    "process": "Natural",
+    "variety": "Aji Bourbon",
+    "cup_note": ["Banana", "Strawberry", "Milk Chocolate"],
+    "roast": "Light",
+    "espresso_profile": "default"
+  },
+  {
+    "id": "single-ethiopia-aricha-gedeb-heirloom-natural",
+    "type": "single",
+    "name": "Ethiopia Aricha Gedeb",
+    "sub": "Heirloom · Natural",
+    "desc": "블랙베리와 체리의 어두운 산미,\n밀키한 초콜릿의 부드러움이 균형을 이룹니다.",
+    "origin": ["Ethiopia"],
+    "process": "Natural",
+    "variety": "Heirloom",
+    "cup_note": ["Blackberry", "Cherry", "Milk Chocolate"],
+    "roast": "Light",
+    "espresso_profile": "ethiopia"
+  },
+
+  { "id": "single-coming-soon-03", "type": "single", "name": "Single Origin 03", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+  { "id": "single-coming-soon-04", "type": "single", "name": "Single Origin 04", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+  { "id": "single-coming-soon-05", "type": "single", "name": "Single Origin 05", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+
+  { "id": "guide-dripbag", "type": "guide", "name": "DRIP BAG", "sub": "1 Bag · 11g", "desc": "10ea box · brew guide" },
+  { "id": "guide-coldbrew", "type": "guide", "name": "COLD BREW", "sub": "No.1 · No.2 · No.5", "desc": "serve guide" }
+]
