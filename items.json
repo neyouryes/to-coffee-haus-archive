@@ -58,6 +58,7 @@
   {
     "id": "single-colombia-el-encanto-aji-bourbon-natural",
     "type": "single",
+    "no": "S.1",
     "name": "Colombia Finca El Encanto",
     "sub": "Aji Bourbon · Natural",
     "desc": "구슬 아이스크림과 바나나 스플릿을 떠올리게 하는\n달콤한 디저트 싱글 오리진.",
@@ -71,6 +72,7 @@
   {
     "id": "single-ethiopia-aricha-gedeb-heirloom-natural",
     "type": "single",
+    "no": "S.2",
     "name": "Ethiopia Aricha Gedeb",
     "sub": "Heirloom · Natural",
     "desc": "블랙베리와 체리의 어두운 산미,\n밀키한 초콜릿의 부드러움이 균형을 이룹니다.",
@@ -82,9 +84,9 @@
     "espresso_profile": "ethiopia"
   },
 
-  { "id": "single-coming-soon-03", "type": "single", "name": "Single Origin 03", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
-  { "id": "single-coming-soon-04", "type": "single", "name": "Single Origin 04", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
-  { "id": "single-coming-soon-05", "type": "single", "name": "Single Origin 05", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+  { "id": "single-coming-soon-03", "type": "single", "no": "S.3", "name": "Single Origin 03", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+  { "id": "single-coming-soon-04", "type": "single", "no": "S.4", "name": "Single Origin 04", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+  { "id": "single-coming-soon-05", "type": "single", "no": "S.5", "name": "Single Origin 05", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
 
   { "id": "guide-dripbag", "type": "guide", "name": "DRIP BAG", "sub": "1 Bag · 11g", "desc": "10ea box · brew guide" },
   { "id": "guide-coldbrew", "type": "guide", "name": "COLD BREW", "sub": "No.1 · No.2 · No.5", "desc": "serve guide" }
