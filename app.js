@@ -55,11 +55,9 @@ function animateSwap(hideEl, showEl){
   hideEl.classList.add("leave");
   showEl.classList.remove("leave");
 
-  // show first (hidden -> visible) then animate in
   showEl.classList.remove("hidden");
   showEl.classList.add("enter");
 
-  // after animation, hide the old one
   setTimeout(()=>{
     hideEl.classList.add("hidden");
     hideEl.classList.remove("leave");
@@ -114,7 +112,7 @@ function matchesSearch(it, keyword){
 
   const hay = normalizeText([
     it.no, it.name, it.sub, it.desc,
-    it.kw, /* ✅ hidden korean keywords */
+    it.kw, // invisible keyword field
     (it.origin||[]).join(" "),
     it.process, it.variety,
     (it.cup_note||[]).join(" "),
@@ -181,7 +179,7 @@ function renderList(){
   });
 }
 
-/* recipes (your fixed specs) */
+/* recipes */
 const RECIPES = {
   blend_filter: {
     water_temp: "88°C",
@@ -202,10 +200,28 @@ const RECIPES = {
     ethiopia: { basket:"IMS 18g", dose:"16.8g", yield:"47g", time:"38–40s", temp:"93°C" },
     default:  { basket:"IMS 18g", dose:"17.5g", yield:"50g", time:"40–43s", temp:"93°C" }
   },
-  coldbrew_guide: { lines: ["80g concentrate", "120g water", "Total 200g"] }
+  dripbag_guide: {
+    hot: {
+      temp:"90°C",
+      total:"180g",
+      pours:"20g (Bloom) → 나머지 3번에 나눠 붓기",
+      detail:"총 4번 푸어",
+      time:"1:30–1:40"
+    },
+    ice: {
+      temp:"90°C",
+      total:"110g",
+      pours:"20g (Bloom) → 나머지 2번에 나눠 붓기",
+      detail:"총 3번 푸어 · 추출 후 얼음 110g 넣고 저어서 마시기",
+      time:"1:30–1:40"
+    }
+  },
+  coldbrew_guide: {
+    lines: ["Concentrate 80g", "Water 120g", "Total 200g"]
+  }
 };
 
-/* roast bar */
+/* roast */
 function roastLevel(roast=""){
   const r = String(roast).toLowerCase().replace(/\s+/g,"");
   if(r.includes("light")) return 0.22;
@@ -223,14 +239,17 @@ function roastBarHtml(roast){
     <div class="roastWrap">
       <div class="roastRow">
         <div class="roastLabel">Roasting Point</div>
-        <div class="roastBar" aria-label="Roasting bar">
-          <div class="roastTicks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="roastDot" style="left:${pct}%"></div>
+
+        <div class="roastStack">
+          <div class="roastBar" aria-label="Roasting bar">
+            <div class="roastTicks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="roastDot" style="left:${pct}%"></div>
+          </div>
+
+          <div class="roastMarks" aria-hidden="true">
+            <span>L</span><span class="mid">M</span><span>D</span>
+          </div>
         </div>
-        <!-- ✅ 오른쪽 끝 LIGHT 텍스트 제거 -->
-      </div>
-      <div class="roastMarks" aria-hidden="true">
-        <span>L</span><span class="mid">M</span><span>D</span>
       </div>
     </div>
   `;
@@ -249,6 +268,22 @@ function createYouTubeThumb(videoId){
     </div>
   `;
 }
+
+document.addEventListener("click", (e)=>{
+  const wrap = e.target.closest(".yt-wrap");
+  if(!wrap) return;
+  if(wrap.querySelector("iframe")) return;
+
+  const id = wrap.dataset.video;
+  wrap.innerHTML = `
+    <iframe
+      src="https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      title="Recipe video">
+    </iframe>
+  `;
+});
 
 /* detail */
 function renderDetail(id){
@@ -294,8 +329,8 @@ function renderDetail(id){
          </div>
        </div>`;
 
-  /* espresso above filter */
   let recipeBlocks = "";
+
   if(it.type === "blend"){
     const f = RECIPES.blend_filter;
     let esp;
@@ -379,8 +414,33 @@ Time ${f.ice.time}</pre>
   }
 
   if(it.type === "guide"){
-    if(it.id === "guide-coldbrew"){
-      recipeBlocks = `<div class="card"><div class="sectionTitle">Cold Brew</div><pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre></div>`;
+    if(it.id === "guide-dripbag"){
+      const g = RECIPES.dripbag_guide;
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Drip Bag</div>
+          <pre>HOT
+Temp ${g.hot.temp}
+Total ${g.hot.total}
+${g.hot.pours}
+${g.hot.detail}
+Time ${g.hot.time}
+
+ICE
+Temp ${g.ice.temp}
+Total ${g.ice.total}
+${g.ice.pours}
+${g.ice.detail}
+Time ${g.ice.time}</pre>
+        </div>
+      `;
+    } else if(it.id === "guide-coldbrew"){
+      recipeBlocks = `
+        <div class="card">
+          <div class="sectionTitle">Cold Brew</div>
+          <pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre>
+        </div>
+      `;
     } else {
       recipeBlocks = `<div class="card"><div class="sectionTitle">Guide</div><pre>Coming soon</pre></div>`;
     }
@@ -401,24 +461,7 @@ Time ${f.ice.time}</pre>
   `;
 }
 
-/* click thumb -> play */
-document.addEventListener("click", (e)=>{
-  const wrap = e.target.closest(".yt-wrap");
-  if(!wrap) return;
-  if(wrap.querySelector("iframe")) return;
-
-  const id = wrap.dataset.video;
-  wrap.innerHTML = `
-    <iframe
-      src="https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen
-      title="Recipe video">
-    </iframe>
-  `;
-});
-
-/* init */
+/* tabs */
 function setActiveTab(name){
   activeFilter = name;
   tabs.querySelectorAll(".tab").forEach(btn=>{
@@ -427,6 +470,7 @@ function setActiveTab(name){
   renderList();
 }
 
+/* init */
 async function init(){
   const res = await fetch("items.json", { cache:"no-store" });
   ITEMS = await res.json();
@@ -448,3 +492,4 @@ async function init(){
 }
 
 init();
+
