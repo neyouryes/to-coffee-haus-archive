@@ -1,25 +1,16 @@
-/* =========================================
-   T.C.H Archive — Light Minimal (screenshot style)
-   No serif / clean lines / navy-ish accent
-========================================= */
-
 :root{
   --bg: #f7f5f1;
-  --paper: #fbfaf7;
   --panel: #ffffff;
 
-  --text: #0f172a;       /* slate/navy */
-  --muted: #64748b;      /* slate */
+  --text: #0f172a;
+  --muted: #64748b;
   --muted2:#94a3b8;
 
   --line: rgba(15, 23, 42, .14);
   --line2: rgba(15, 23, 42, .08);
 
-  --accent: #1e2b55;     /* navy accent */
-  --accentSoft: rgba(30,43,85,.08);
-
+  --accent: #1e2b55;
   --shadow: 0 22px 55px rgba(15, 23, 42, .08);
-  --r: 16px;
   --r2: 22px;
   --max: 1120px;
 
@@ -41,7 +32,7 @@ body{
   overflow-x: hidden;
 }
 
-/* ================= Header ================= */
+/* Header */
 .header{
   position: sticky;
   top: 0;
@@ -51,10 +42,7 @@ body{
   border-bottom: 1px solid var(--line2);
   padding: 18px 22px 14px;
 }
-
-.header.isCompact{
-  padding: 12px 22px 10px;
-}
+.header.isCompact{ padding: 12px 22px 10px; }
 
 .brand{
   max-width: var(--max);
@@ -74,15 +62,14 @@ body{
   color: var(--accent);
   text-decoration:none;
 }
-
 .tch{
   font-family: var(--mono);
   font-weight: 700;
   letter-spacing: .22em;
   font-size: 14px;
 }
-
-.dots{ display:none; } /* 스샷 느낌은 점 장식 거의 안 보이게 */
+.dots{ display:none; }
+.dot{ display:none; }
 
 .brandText{
   text-align:right;
@@ -105,7 +92,7 @@ body{
   color: var(--muted);
 }
 
-/* tools row */
+/* Tools */
 .tools{
   max-width: var(--max);
   margin: 14px auto 0;
@@ -114,12 +101,7 @@ body{
   justify-content:space-between;
   gap:12px;
 }
-
-.tabs{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
+.tabs{ display:flex; gap:10px; flex-wrap:wrap; }
 
 .tab{
   appearance:none;
@@ -146,7 +128,6 @@ body{
   box-shadow: 0 10px 22px rgba(15,23,42,.06);
 }
 
-/* search */
 .search{
   width: min(680px, 60vw);
   padding: 12px 14px;
@@ -163,13 +144,12 @@ body{
   box-shadow: 0 0 0 4px rgba(30,43,85,.08);
 }
 
-/* ================= Main / Panel ================= */
+/* Main / Panel */
 .main{
   max-width: var(--max);
   margin: 18px auto 48px;
   padding: 0 22px;
 }
-
 .panel{
   background: rgba(255,255,255,.68);
   border: 1px solid var(--line2);
@@ -177,7 +157,6 @@ body{
   box-shadow: var(--shadow);
   overflow:hidden;
 }
-
 .panelHead{
   display:flex;
   align-items:center;
@@ -200,7 +179,7 @@ body{
   color: var(--muted);
 }
 
-/* ================= List ================= */
+/* List */
 .list{ padding: 0; }
 
 .item{
@@ -215,16 +194,16 @@ body{
   transition: background .12s ease;
 }
 .item:first-child{ border-top: none; }
+.item:hover{ background: rgba(30,43,85,.06); }
 
-.item:hover{
-  background: rgba(30,43,85,.06); /* 스샷처럼 살짝 하이라이트 */
-}
-
+/* ✅ NO.1 / S.1 / MD 네이비 강조 */
 .no{
   font-family: var(--mono);
   letter-spacing: .22em;
   font-size: 13px;
-  color: rgba(30,43,85,.75);
+  color: rgba(30,43,85,.92);
+  font-weight: 750;
+  text-transform: uppercase;
 }
 
 .title .mainT{
@@ -247,7 +226,6 @@ body{
   justify-content:flex-end;
   gap: 12px;
 }
-
 .badge{
   font-family: var(--mono);
   font-size: 12px;
@@ -258,20 +236,18 @@ body{
   color: var(--accent);
   background: rgba(255,255,255,.8);
 }
-
 .badge.dim{
   opacity: .55;
   border-color: rgba(15,23,42,.18);
   color: rgba(15,23,42,.45);
 }
-
 .chev{
   font-family: var(--mono);
   color: rgba(100,116,139,.70);
   font-size: 18px;
 }
 
-/* empty */
+/* Empty */
 .empty{ padding: 26px 20px 30px; }
 .emptyBox{
   background: rgba(255,255,255,.75);
@@ -279,11 +255,7 @@ body{
   border-radius: 16px;
   padding: 18px;
 }
-.emptyTitle{
-  font-family: var(--sans);
-  font-weight: 650;
-  color: var(--accent);
-}
+.emptyTitle{ font-family: var(--sans); font-weight: 650; color: var(--accent); }
 .emptySub{
   margin:10px 0 0;
   font-family: var(--sans);
@@ -292,7 +264,7 @@ body{
   line-height: 1.6;
 }
 
-/* ================= Detail ================= */
+/* Detail */
 .detailTop{
   display:flex;
   align-items:center;
@@ -301,7 +273,6 @@ body{
   border-bottom: 1px solid var(--line2);
   background: rgba(255,255,255,.72);
 }
-
 .back{
   appearance:none;
   border: 1px solid var(--line);
@@ -315,7 +286,6 @@ body{
   cursor:pointer;
 }
 .back:hover{ border-color: rgba(30,43,85,.24); }
-
 .crumb{
   font-family: var(--mono);
   letter-spacing: .10em;
@@ -334,7 +304,6 @@ body{
   border-radius: 18px;
   padding: 18px;
 }
-
 .h1{
   margin:0;
   font-family: var(--mono);
@@ -363,11 +332,7 @@ body{
   margin-bottom: 10px;
 }
 
-.subline{
-  display:flex;
-  gap: 8px;
-  flex-wrap:wrap;
-}
+.subline{ display:flex; gap: 8px; flex-wrap:wrap; }
 
 .chip{
   display:inline-flex;
@@ -396,8 +361,9 @@ pre{
   border: 1px solid rgba(30,43,85,.10);
 }
 
-/* roast bar (keep subtle) */
+/* Roast */
 .roastWrap{ margin-top: 14px; }
+.roastRow{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .roastLabel{
   font-family: var(--mono);
   font-size: 11px;
@@ -406,12 +372,12 @@ pre{
 }
 .roastBar{
   position:relative;
+  flex:1;
   height: 10px;
   border-radius: 999px;
   background: rgba(15,23,42,.06);
   border: 1px solid rgba(15,23,42,.08);
 }
-.roastTicks{ display:none; } /* 스샷처럼 심플 */
 .roastDot{
   position:absolute;
   top:50%;
@@ -431,7 +397,8 @@ pre{
   margin-top: 8px;
 }
 
-/* video */
+/* Video */
+.yt-wrap{ position:relative; }
 .yt-thumb{
   width:100%;
   border: 1px solid var(--line2);
@@ -451,7 +418,6 @@ pre{
   position:absolute; inset:0;
   background: linear-gradient(180deg, transparent, rgba(0,0,0,.12));
 }
-.yt-playDot{ display:none; } /* 스샷은 아이콘 과하지 않게 */
 .yt-caption{
   position:absolute;
   right: 12px; bottom: 12px;
@@ -460,8 +426,6 @@ pre{
   letter-spacing: .22em;
   color: rgba(255,255,255,.9);
 }
-
-.yt-wrap{ position:relative; }
 .yt-wrap iframe{
   width:100%;
   aspect-ratio: 16/9;
@@ -469,7 +433,28 @@ pre{
   border-radius: 16px;
 }
 
-/* footer */
+/* Mini empty */
+.miniEmpty{
+  border: 1px dashed rgba(30,43,85,.18);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(30,43,85,.03);
+}
+.miniEmptyTitle{
+  font-family: var(--mono);
+  letter-spacing: .18em;
+  font-size: 12px;
+  color: rgba(30,43,85,.85);
+}
+.miniEmptySub{
+  margin:8px 0 0;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: rgba(100,116,139,.90);
+  line-height: 1.6;
+}
+
+/* Footer */
 .foot{
   padding: 16px 18px;
   border-top: 1px solid var(--line2);
@@ -480,7 +465,7 @@ pre{
   color: rgba(100,116,139,.75);
 }
 
-/* transitions */
+/* Transitions */
 .hidden{ display:none !important; }
 .panel.enter{ animation: in .22s ease both; }
 .panel.leave{ animation: out .22s ease both; }
@@ -495,3 +480,4 @@ pre{
   .item{ grid-template-columns: 78px 1fr 110px; }
   .title .mainT{ font-size: 16px; }
 }
+
