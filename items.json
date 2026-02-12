@@ -5,11 +5,11 @@
     "no": "NO.1",
     "name": "DAILY",
     "desc": "가볍고 산뜻한 고소함.\n마시기 편안한 데일리 블렌드.",
-    "cup_note": ["Cashew", "Caramel", "Milk Chocolate"],
+    "cup_note": ["Cashew Nut", "Caramel", "Milk Chocolate"],
     "origin": ["Brazil", "Guatemala", "Ethiopia"],
     "roast": "Medium",
     "cold_brew": true,
-    "kw": "데일리 daily 고소 산뜻 캐슈 cashew 카라멜 caramel 밀크초콜릿 milkchocolate 브라질 brazil 과테말라 guatemala 에티오피아 ethiopia 블렌드"
+    "kw": "데일리 daily 고소 산뜻 캐슈넛 cashew 카라멜 caramel 밀크초콜릿 milkchocolate 브라질 brazil 과테말라 guatemala 에티오피아 ethiopia 블렌드"
   },
   {
     "id": "blend-no2-signature",
