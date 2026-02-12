@@ -8,51 +8,56 @@
     "cup_note": ["Cashew", "Caramel", "Milk Chocolate"],
     "origin": ["Brazil", "Guatemala", "Ethiopia"],
     "roast": "Medium",
-    "cold_brew": true
+    "cold_brew": true,
+    "kw": "데일리 daily 고소 산뜻 캐슈 cashew 카라멜 caramel 밀크초콜릿 milkchocolate 브라질 brazil 과테말라 guatemala 에티오피아 ethiopia 블렌드"
   },
   {
     "id": "blend-no2-signature",
     "type": "blend",
     "no": "NO.2",
-    "name": "SIGNATURE BLEND",
+    "name": "SIGNATURE",
     "desc": "레드와인을 닮은 버건디 톤의 우아하고 묵직한 블렌드.\n깊이 있는 과일 향과 진득한 단맛이 길게 이어집니다.",
     "cup_note": ["Kyoho Grape", "Dried Plum", "Red Wine", "Syrup"],
     "origin": ["Tanzania", "Guatemala", "Ethiopia"],
     "roast": "Medium",
-    "cold_brew": true
+    "cold_brew": true,
+    "kw": "시그니처 시그니쳐 signature 레드와인 redwine 버건디 burgundy 거봉 kyoho 포도 건자두 driedplum 자두 와인 시럽 syrup 탄자니아 tanzania 과테말라 guatemala 에티오피아 ethiopia 블렌드"
   },
   {
     "id": "blend-no3-sweetness",
     "type": "blend",
     "no": "NO.3",
-    "name": "SWEETNESS BLEND",
+    "name": "SWEETNESS",
     "desc": "티라미수를 연상시키는 크리미함과\n달콤쌉싸름한 디저트 감각의 블렌드.",
     "cup_note": ["Tiramisu", "Digestive Cookie", "Oatmeal"],
     "origin": ["Brazil", "Guatemala", "Colombia"],
     "roast": "Medium-Dark",
-    "cold_brew": false
+    "cold_brew": false,
+    "kw": "스윗니스 스위트니스 sweetness 디저트 티라미수 tiramisu 다이제 다이제쿠키 digestivecookie 오트밀 oatmeal 크리미 달콤 쌉싸름 브라질 brazil 과테말라 guatemala 콜롬비아 colombia 블렌드"
   },
   {
     "id": "blend-no4-dark",
     "type": "blend",
     "no": "NO.4",
-    "name": "DARK BLEND",
+    "name": "DARK",
     "desc": "섬세한 블랙의 부드러운 카리스마.\n묵직하지만 거칠지 않은 다크 블렌드.",
     "cup_note": ["Dark Chocolate", "Roasted Walnut", "Long Finish"],
     "origin": ["Brazil", "Colombia"],
     "roast": "Dark",
-    "cold_brew": false
+    "cold_brew": false,
+    "kw": "다크 dark 블랙 카리스마 다크초콜렛 darkchocolate 초콜릿 구운호두 roastedwalnut 호두 긴여운 longfinish 브라질 brazil 콜롬비아 colombia 블렌드"
   },
   {
     "id": "blend-no5-decaf",
     "type": "blend",
     "no": "NO.5",
-    "name": "DECAFFEINE BLEND",
+    "name": "DECAFFEINE",
     "desc": "홍시를 닮은 달콤함.\n밤에도 부담 없이 즐길 수 있는 휴식 같은 커피.",
     "cup_note": ["Persimmon", "Caramel", "Popcorn", "Juicy"],
     "origin": ["Brazil", "Ethiopia"],
     "roast": "Medium",
-    "cold_brew": true
+    "cold_brew": true,
+    "kw": "디카페인 디카프 decaf decaffeine decaffeinated 카페인없음 카페인프리 밤 휴식 홍시 persimmon 카라멜 caramel 팝콘 popcorn 쥬시 juicy 브라질 brazil 에티오피아 ethiopia 블렌드"
   },
 
   {
@@ -67,7 +72,8 @@
     "variety": "Aji Bourbon",
     "cup_note": ["Banana", "Strawberry", "Milk Chocolate"],
     "roast": "Light",
-    "espresso_profile": "default"
+    "espresso_profile": "default",
+    "kw": "콜롬비아 colombia 엘엔칸토 elencanto 엔칸토 finca 자연 내추럴 natural 아히버번 ajibourbon 버번 바나나 banana 딸기 strawberry 밀크초콜릿 milkchocolate 디저트 싱글 싱글오리진"
   },
   {
     "id": "single-ethiopia-aricha-gedeb-heirloom-natural",
@@ -81,14 +87,56 @@
     "variety": "Heirloom",
     "cup_note": ["Blackberry", "Cherry", "Milk Chocolate"],
     "roast": "Light",
-    "espresso_profile": "ethiopia"
+    "espresso_profile": "ethiopia",
+    "kw": "에티오피아 ethiopia 아리차 aricha 게뎁 gedeb 헤어룸 heirloom 내추럴 natural 블랙베리 blackberry 체리 cherry 밀키초콜릿 milkchocolate 산미 싱글 싱글오리진"
   },
 
-  { "id": "single-coming-soon-03", "type": "single", "no": "S.3", "name": "Single Origin 03", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
-  { "id": "single-coming-soon-04", "type": "single", "no": "S.4", "name": "Single Origin 04", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
-  { "id": "single-coming-soon-05", "type": "single", "no": "S.5", "name": "Single Origin 05", "sub": "Coming soon", "desc": "Details will be updated.", "coming_soon": true },
+  {
+    "id": "single-coming-soon-03",
+    "type": "single",
+    "no": "S.3",
+    "name": "Single Origin 03",
+    "sub": "Coming soon",
+    "desc": "Details will be updated.",
+    "coming_soon": true,
+    "kw": "싱글 single 싱글오리진 comingsoon 업데이트예정 예정"
+  },
+  {
+    "id": "single-coming-soon-04",
+    "type": "single",
+    "no": "S.4",
+    "name": "Single Origin 04",
+    "sub": "Coming soon",
+    "desc": "Details will be updated.",
+    "coming_soon": true,
+    "kw": "싱글 single 싱글오리진 comingsoon 업데이트예정 예정"
+  },
+  {
+    "id": "single-coming-soon-05",
+    "type": "single",
+    "no": "S.5",
+    "name": "Single Origin 05",
+    "sub": "Coming soon",
+    "desc": "Details will be updated.",
+    "coming_soon": true,
+    "kw": "싱글 single 싱글오리진 comingsoon 업데이트예정 예정"
+  },
 
-  { "id": "guide-dripbag", "type": "guide", "name": "DRIP BAG", "sub": "1 Bag · 11g", "desc": "10ea box · brew guide" },
-  { "id": "guide-coldbrew", "type": "guide", "name": "COLD BREW", "sub": "No.1 · No.2 · No.5", "desc": "serve guide" }
+  {
+    "id": "guide-dripbag",
+    "type": "guide",
+    "name": "DRIP BAG",
+    "sub": "1 Bag · 11g",
+    "desc": "10ea box · brew guide",
+    "kw": "드립백 dripbag 드립백레시피 레시피 brew guide 핸드드립 아이스 hot ice 11g 10개입 10ea"
+  },
+  {
+    "id": "guide-coldbrew",
+    "type": "guide",
+    "name": "COLD BREW",
+    "sub": "No.1 · No.2 · No.5",
+    "desc": "serve guide",
+    "kw": "콜드브루 coldbrew 콜드 브루 더치 농축액 concentrate 서빙 serve 가이드 guide no1 no2 no5"
+  }
 ]
 
