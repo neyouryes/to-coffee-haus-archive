@@ -1,242 +1,454 @@
 :root{
-  --navy:#24324a;
-  --text:#1f2430;
+  --bg:#f6f1ea;           /* ✅ 크림 톤 */
+  --paper:#fbfaf8;        /* 카드 배경 */
+  --navy:#24324a;         /* 포인트 네이비 */
+  --text:#101827;
   --sub:#6b7280;
-  --line:#e5e7eb;
-  --bg:#f7f8fb;
+  --line:#e7e1d9;
+  --line2:#ded6cc;
 }
 
-*{box-sizing:border-box}
+*{ box-sizing:border-box; }
+
+html,body{ height:100%; }
 
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* ✅ 산세리프 유지 */
   background:var(--bg);
   color:var(--text);
 }
 
+/* ---------- header ---------- */
 .header{
-  padding:28px 40px 20px;
-  border-bottom:1px solid var(--line);
-  background:#fff;
+  position:sticky;
+  top:0;
+  z-index:20;
+  padding:22px 28px 16px;
+  background:rgba(246,241,234,.92);
+  backdrop-filter:saturate(140%) blur(8px);
+  border-bottom:1px solid rgba(231,225,217,.55);
+}
+
+.brand{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.brandMark{
+  text-decoration:none;
+  color:var(--navy);
+  font-weight:800;
+  letter-spacing:.14em;
+  font-size:18px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brandMark .dots{ display:none; } /* 점은 숨겨도 되고 원하면 켜도 됨 */
+
+.brandText{
+  margin-left:8px;
 }
 
 .brandText .name{
   font-size:14px;
-  letter-spacing:2px;
-  font-weight:600;
+  letter-spacing:.22em;
+  font-weight:700;
+  color:var(--navy);
+  line-height:1.2;
 }
 
 .brandText .tag{
   font-size:12px;
   color:var(--sub);
   margin-top:4px;
+  letter-spacing:.06em;
+}
+
+/* tools row */
+.tools{
+  margin-top:14px;
+  display:grid;
+  gap:12px;
 }
 
 .tabs{
-  margin-top:18px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .tab{
-  border:1px solid var(--line);
-  background:#fff;
-  padding:6px 16px;
+  border:1px solid var(--line2);
+  background:transparent;
+  padding:7px 14px;
   border-radius:999px;
-  margin-right:8px;
   cursor:pointer;
   font-size:13px;
+  letter-spacing:.08em;
+  color:rgba(16,24,39,.78);
 }
 
 .tab.isOn{
-  background:var(--navy);
-  color:#fff;
-  border-color:var(--navy);
+  border-color:rgba(36,50,74,.22);
+  background:rgba(36,50,74,.08);
+  color:var(--navy);
 }
 
 .search{
-  margin-top:16px;
   width:100%;
-  padding:12px 18px;
+  padding:14px 18px;
   border-radius:999px;
-  border:1px solid var(--line);
+  border:1px solid rgba(222,214,204,.85);
+  background:rgba(251,250,248,.85);
+  outline:none;
+  font-size:14px;
 }
 
+.search:focus{
+  border-color:rgba(36,50,74,.28);
+  box-shadow:0 0 0 3px rgba(36,50,74,.08);
+}
+
+/* ---------- layout ---------- */
 .main{
-  padding:40px;
-  max-width:980px;
-  margin:auto;
+  max-width:1080px;
+  margin:0 auto;
+  padding:32px 24px 56px;
 }
 
 .panel{
-  background:#fff;
+  background:var(--paper);
+  border:1px solid rgba(222,214,204,.9);
   border-radius:18px;
-  padding:40px;
-  border:1px solid var(--line);
+  overflow:hidden;
+  box-shadow:0 8px 26px rgba(16,24,39,.06);
 }
 
-.hidden{display:none}
+.hidden{ display:none; }
 
-/* LIST */
+.panelHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 20px;
+  border-bottom:1px solid rgba(222,214,204,.85);
+}
 
+.panelTitle{
+  font-size:12px;
+  letter-spacing:.26em;
+  font-weight:800;
+  color:var(--navy);
+}
+
+.panelMeta{
+  font-size:13px;
+  color:var(--sub);
+}
+
+.list{
+  width:100%;
+}
+
+/* ---------- list items ---------- */
 .item{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  padding:22px 0;
-  border-bottom:1px solid var(--line);
+  gap:16px;
+  padding:18px 20px;
+  border-bottom:1px solid rgba(222,214,204,.75);
   cursor:pointer;
+  background:transparent;
 }
+
+.item:hover{
+  background:rgba(36,50,74,.03);
+}
+
+.item:last-child{ border-bottom:none; }
 
 .no{
-  font-weight:700;
-  letter-spacing:2px;
-  color:var(--navy);
-  width:80px;
+  width:84px;
+  font-weight:800;
+  letter-spacing:.24em;
+  color:rgba(36,50,74,.88);
 }
 
-.title{
-  flex:1;
-}
+.title{ flex:1; }
 
 .mainT{
-  font-weight:600;
   font-size:16px;
+  font-weight:800;
+  color:rgba(16,24,39,.92);
+  letter-spacing:.02em;
 }
 
 .subT{
-  font-size:13px;
-  color:var(--sub);
   margin-top:6px;
+  font-size:13px;
+  color:rgba(107,114,128,.95);
+  letter-spacing:.02em;
+}
+
+.badgeCol{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .badge{
-  border:1px solid var(--line);
+  border:1px solid rgba(36,50,74,.22);
+  color:var(--navy);
+  background:transparent;
   padding:6px 14px;
   border-radius:999px;
   font-size:12px;
+  letter-spacing:.12em;
+  font-weight:700;
+}
+
+.badge.dim{
+  opacity:.45;
 }
 
 .chev{
-  margin-left:10px;
-  color:var(--sub);
+  color:rgba(107,114,128,.9);
+  font-size:18px;
+  margin-left:2px;
 }
 
-/* ============================ */
-/* DETAIL TYPOGRAPHY (FINAL)    */
-/* ============================ */
-
-/* 기본(Blend 기준): NO.1 크게/굵게 */
-.h1{
-  font-size:46px;          /* ✅ 더 크게 */
-  font-weight:900;         /* ✅ 더 굵게 */
-  letter-spacing:3px;
-  margin-bottom:8px;
-  line-height:1.05;
+/* ---------- detail ---------- */
+.detailTop{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 20px;
+  border-bottom:1px solid rgba(222,214,204,.85);
+  background:rgba(251,250,248,.75);
 }
 
-/* 기본(Blend 기준): DAILY 더 작고 얇게 */
-.subTitle{
-  font-size:20px;          /* ✅ 조금 더 작게 */
-  font-weight:350;         /* ✅ 더 얇게 */
-  letter-spacing:1.4px;
-  margin-bottom:22px;
-  opacity:.92;
+.back{
+  border:1px solid rgba(36,50,74,.22);
+  background:transparent;
+  color:var(--navy);
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:700;
 }
 
-/* SINGLE & GUIDE: 상품명(원두명/DRIP BAG) 더 강조 */
+.crumb{
+  font-size:14px;
+  color:rgba(107,114,128,.95);
+}
+
+/* ✅ 여기서 타입별 타이포 조정 */
+.detail{
+  padding:22px 20px 26px;
+}
+
+/* blend: NO.1 더 크고 굵게 / DAILY는 조금 작고 얇게 */
+.detail.blend .h1{
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:.12em;
+  margin:0 0 8px 0;
+  color:rgba(16,24,39,.94);
+}
+
+.detail.blend .subTitle{
+  font-size:22px;
+  font-weight:420;
+  letter-spacing:.08em;
+  margin:0 0 18px 0;
+  color:rgba(16,24,39,.86);
+}
+
+/* single/guide: 상품명(=subTitle) 더 강조 */
 .detail.single .h1,
 .detail.guide .h1{
-  font-size:18px;          /* ✅ 넘버는 보조 */
-  font-weight:600;
+  font-size:18px;
+  font-weight:750;
+  letter-spacing:.18em;
   opacity:.65;
-  margin-bottom:6px;
-  letter-spacing:2px;
+  margin:0 0 6px 0;
 }
 
 .detail.single .subTitle,
 .detail.guide .subTitle{
-  font-size:34px;          /* ✅ 상품명 강조 */
-  font-weight:800;
-  margin-bottom:26px;
-  opacity:1;
-  letter-spacing:1px;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:.02em;
+  margin:0 0 20px 0;
 }
 
-/* 설명문: 정보칩과 간격 더 벌리기 */
+.h1{ /* 안전망: 기본값 */
+  font-size:40px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.subTitle{
+  font-size:22px;
+  font-weight:420;
+  letter-spacing:.08em;
+}
+
+/* desc + info spacing */
 .desc{
-  margin-top:18px;
-  margin-bottom:42px;      /* ✅ 기존 34 -> 42로 확대 */
-  line-height:1.7;
-  color:#4b4f5a;
+  margin:18px 0 34px;
+  line-height:1.75;
+  color:rgba(75,79,90,.96);
+  font-size:16px;
 }
 
-/* Origin/Process/Variety 등 정보칩 라인 */
+/* chips */
 .subline{
-  margin-top:14px;         /* ✅ 살짝 더 숨쉬게 */
+  margin-top:18px;
 }
 
 .chip{
-  display:inline-block;
-  padding:6px 14px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 14px;
   border-radius:999px;
-  border:1px solid var(--line);
-  font-size:13px;
-  margin:4px 6px 0 0;
+  border:1px solid rgba(222,214,204,.95);
+  background:rgba(251,250,248,.85);
+  font-size:14px;
+  letter-spacing:.08em;
+  color:rgba(16,24,39,.78);
+  margin:6px 10px 0 0;
 }
 
-/* ROAST */
+/* cards inside detail */
+.card{
+  padding:22px 22px;
+  border-bottom:1px solid rgba(222,214,204,.75);
+}
 
+.card:last-child{ border-bottom:none; }
+
+.sectionTitle{
+  font-size:12px;
+  letter-spacing:.22em;
+  font-weight:900;
+  color:rgba(36,50,74,.9);
+  margin-bottom:12px;
+}
+
+/* roast */
 .roastWrap{
-  margin-top:24px;
+  margin-top:22px;
+}
+
+.roastRow{
+  display:flex;
+  align-items:center;
+  gap:18px;
 }
 
 .roastLabel{
   font-size:13px;
-  color:var(--sub);
-  margin-bottom:8px;
+  color:rgba(107,114,128,.92);
+  letter-spacing:.24em;
+  white-space:nowrap;
+}
+
+.roastStack{
+  flex:1;
 }
 
 .roastBar{
-  height:8px;
-  background:#eceff4;
+  height:10px;
   border-radius:999px;
+  background:rgba(36,50,74,.08);
   position:relative;
+  border:1px solid rgba(36,50,74,.10);
+}
+
+.roastTicks{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:space-between;
+  padding:0 10px;
+  opacity:.35;
+}
+
+.roastTicks i{
+  width:1px;
+  height:100%;
+  background:rgba(36,50,74,.35);
+  display:block;
 }
 
 .roastDot{
   width:12px;
   height:12px;
+  border-radius:999px;
   background:var(--navy);
-  border-radius:50%;
   position:absolute;
   top:50%;
   transform:translate(-50%,-50%);
+  box-shadow:0 4px 12px rgba(36,50,74,.22);
 }
 
 .roastMarks{
   display:flex;
   justify-content:space-between;
-  font-size:12px;
   margin-top:8px;
-  color:var(--sub);
+  color:rgba(107,114,128,.92);
+  font-size:12px;
+  letter-spacing:.32em;
 }
 
-/* CARD */
+.roastMarks .mid{ transform:translateX(-2px); }
 
-.card{
-  margin-bottom:40px;
-}
-
-.sectionTitle{
-  font-weight:600;
-  margin-bottom:12px;
-}
-
+/* recipe pre */
 pre{
-  background:#f1f3f8;
-  padding:18px;
-  border-radius:12px;
+  margin:0;
+  background:rgba(36,50,74,.04);
+  border:1px solid rgba(36,50,74,.10);
+  padding:16px 16px;
+  border-radius:14px;
   font-size:13px;
+  line-height:1.7;
+  color:rgba(16,24,39,.88);
+  overflow:auto;
+}
+
+/* footer */
+.foot{
+  padding:18px 20px;
+  border-top:1px solid rgba(222,214,204,.75);
+  color:rgba(107,114,128,.9);
+  font-size:12px;
+  background:rgba(251,250,248,.6);
+}
+
+/* empty state */
+.empty{
+  padding:38px 20px;
+}
+.emptyBox{
+  border:1px dashed rgba(36,50,74,.22);
+  background:rgba(36,50,74,.03);
+  border-radius:16px;
+  padding:22px;
+}
+.emptyTitle{
+  font-weight:900;
+  letter-spacing:.12em;
+  color:rgba(36,50,74,.9);
+}
+.emptySub{
+  margin-top:8px;
+  color:rgba(107,114,128,.95);
   line-height:1.6;
 }
-
