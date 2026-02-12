@@ -3,6 +3,7 @@ let activeFilter = "all";
 
 const $ = (s)=>document.querySelector(s);
 
+const header = document.querySelector(".header");
 const listView = $("#listView");
 const detailView = $("#detailView");
 const itemList = $("#itemList");
@@ -36,16 +37,33 @@ function route(){
   else showList();
 }
 
+function animateSwap(hideEl, showEl){
+  hideEl.classList.remove("enter");
+  hideEl.classList.add("leave");
+  showEl.classList.remove("leave");
+  showEl.classList.remove("hidden");
+  showEl.classList.add("enter");
+  setTimeout(()=>{
+    hideEl.classList.add("hidden");
+    hideEl.classList.remove("leave");
+    showEl.classList.remove("enter");
+  }, 220);
+}
+
 function showList(){
+  if(detailView.classList.contains("hidden")){
+    renderList();
+    return;
+  }
   renderList();
-  detailView.classList.add("hidden");
-  listView.classList.remove("hidden");
+  animateSwap(detailView, listView);
 }
 
 function showDetail(id){
   renderDetail(id);
-  listView.classList.add("hidden");
-  detailView.classList.remove("hidden");
+  if(detailView.classList.contains("hidden")){
+    animateSwap(listView, detailView);
+  }
 }
 
 function goList(){
@@ -128,17 +146,17 @@ function renderList(){
   });
 }
 
-/* ===== Recipes Data ===== */
+/* recipes */
 const RECIPES = {
   blend_filter: {
     water_temp: "88°C",
-    hot: { dose:"20g", total:"300g", pours:"30g (Bloom)\n90g\n170g\n20g", add:"가수 10–20g", time:"2:40" },
-    ice: { dose:"20g", total:"200g", pours:"30g (Bloom)\n40g\n110g\n20g", note:"얼음 칠링", time:"2:20" }
+    hot: { dose:"20g", total:"300g", pours:"30g (Bloom) → 90g → 170g → 20g", add:"가수 10–20g", time:"2:40" },
+    ice: { dose:"20g", total:"200g", pours:"30g (Bloom) → 40g → 110g → 20g", note:"얼음 칠링", time:"2:20" }
   },
   single_filter: {
     water_temp: "90°C",
-    hot: { dose:"20g", total:"300ml", pours:"30g\n90g\n170g\n20g", add:"가수 10–20g", time:"2:30" },
-    ice: { dose:"20g", total:"200ml", pours:"30g\n50g\n100g\n20g", time:"2:30" }
+    hot: { dose:"20g", total:"300ml", pours:"30g → 90g → 170g → 20g", add:"가수 10–20g", time:"2:30" },
+    ice: { dose:"20g", total:"200ml", pours:"30g → 50g → 100g → 20g", time:"2:30" }
   },
   dripbag_guide: {
     hot: {
@@ -158,39 +176,9 @@ const RECIPES = {
   }
 };
 
-/* ===== Protocol Helpers ===== */
-function protoStepsHtml(text=""){
-  const lines = String(text).split("\n").map(s=>s.trim()).filter(Boolean);
-  return `
-    <div class="protoSteps">
-      ${lines.map(l=>`<div class="protoStep">${escapeHtml(l)}</div>`).join("")}
-    </div>
-  `;
-}
-
-function protoCardHtml(title, rows){
-  const trs = rows.map(r=>`
-    <tr>
-      <td class="protoK">${escapeHtml(r.k)}</td>
-      <td class="protoV">${
-        r.type === "steps"
-          ? protoStepsHtml(r.v)
-          : `<div>${escapeHtml(r.v)}</div>`
-      }</td>
-    </tr>
-  `).join("");
-
-  return `
-    <div class="card protoCard">
-      <div class="sectionTitle">${escapeHtml(title)}</div>
-      <table class="protoGrid"><tbody>${trs}</tbody></table>
-    </div>
-  `;
-}
-
-/* ===== Roast ===== */
+/* roast */
 function roastLevel(roast=""){
-  const r = String(roast).toLowerCase();
+  const r = String(roast).toLowerCase().replace(/\s+/g,"");
   if(r.includes("light")) return 0.22;
   if(r.includes("medium-dark")) return 0.72;
   if(r.includes("dark")) return 0.86;
@@ -201,6 +189,7 @@ function roastLevel(roast=""){
 function roastBarHtml(roast){
   if(!roast) return "";
   const pct = roastLevel(roast) * 100;
+
   return `
     <div class="roastWrap">
       <div class="roastRow">
@@ -219,39 +208,52 @@ function roastBarHtml(roast){
   `;
 }
 
-/* ===== Detail ===== */
+/* detail */
 function renderDetail(id){
   const it = ITEMS.find(x=>x.id===id);
   if(!it) return;
 
   crumbName.textContent = (it.no ? `${it.no} ${it.name}` : it.name);
 
+  const mainTitle = (it.type === "blend" || it.type === "single") ? it.no : it.name;
+  const subTitle  = (it.type === "blend" || it.type === "single") ? it.name : it.sub || "";
+
+  const desc = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
+
+  const noteHtml = (it.cup_note||[])
+    .map(n=>`<span class="chip">${escapeHtml(n)}</span>`)
+    .join("");
+
   let recipeBlocks = "";
 
   if(it.type === "guide"){
     const g = RECIPES.dripbag_guide;
+    recipeBlocks = `
+      <div class="card">
+        <div class="sectionTitle">Drip Bag</div>
+<pre>HOT
+Temp ${g.hot.temp}
+Water Total ${g.hot.total}
+${g.hot.pours}
+${g.hot.detail}
+Time ${g.hot.time}
 
-    recipeBlocks += protoCardHtml("Drip Bag · HOT", [
-      { k:"Temp", v:g.hot.temp },
-      { k:"Water Total", v:g.hot.total },
-      { k:"Pour", v:g.hot.pours, type:"steps" },
-      { k:"Add", v:g.hot.detail },
-      { k:"Time", v:g.hot.time }
-    ]);
-
-    recipeBlocks += protoCardHtml("Drip Bag · ICE", [
-      { k:"Temp", v:g.ice.temp },
-      { k:"Water Total", v:g.ice.total },
-      { k:"Pour", v:g.ice.pours, type:"steps" },
-      { k:"Note", v:g.ice.detail },
-      { k:"Time", v:g.ice.time }
-    ]);
+ICE
+Temp ${g.ice.temp}
+Water Total ${g.ice.total}
+${g.ice.pours}
+${g.ice.detail}
+Time ${g.ice.time}</pre>
+      </div>
+    `;
   }
 
   detail.innerHTML = `
     <div class="card">
-      <h2 class="h1">${escapeHtml(it.no || it.name)}</h2>
-      <div class="subTitle">${escapeHtml(it.name)}</div>
+      <h2 class="h1">${mainTitle}</h2>
+      <div class="subTitle">${subTitle}</div>
+      ${desc}
+      ${noteHtml ? `<div class="subline">${noteHtml}</div>` : ""}
       ${roastBarHtml(it.roast)}
     </div>
     ${recipeBlocks}
@@ -260,14 +262,14 @@ function renderDetail(id){
 
 /* init */
 async function init(){
-  const res = await fetch("items.json");
+  const res = await fetch("items.json", { cache:"no-store" });
   ITEMS = await res.json();
 
   q.addEventListener("input", renderList);
   backBtn.addEventListener("click", goList);
-  homeBtn.addEventListener("click", e=>{ e.preventDefault(); goList(); });
+  homeBtn.addEventListener("click", (e)=>{ e.preventDefault(); goList(); });
 
-  tabs.addEventListener("click", e=>{
+  tabs.addEventListener("click", (e)=>{
     const btn = e.target.closest(".tab");
     if(!btn) return;
     activeFilter = btn.dataset.filter;
