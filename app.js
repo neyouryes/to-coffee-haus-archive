@@ -298,7 +298,7 @@ function renderDetail(id){
   }
 
   crumbName.textContent = (it.no ? `${it.no} ${it.name}` : it.name);
-
+  detail.className = "detail " + it.type;
   const mainTitle = (it.type === "blend" || it.type === "single") ? escapeHtml(it.no || it.name) : escapeHtml(it.name);
   const subTitle  = (it.type === "blend" || it.type === "single") ? escapeHtml(it.name) : escapeHtml(it.sub || "");
   const subtitle  = subTitle ? `<div class="subTitle">${subTitle}</div>` : "";
