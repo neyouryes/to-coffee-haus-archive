@@ -3,6 +3,7 @@ let activeFilter = "all";
 
 const $ = (s)=>document.querySelector(s);
 
+const header = document.querySelector(".header");
 const listView = $("#listView");
 const detailView = $("#detailView");
 const itemList = $("#itemList");
@@ -18,6 +19,15 @@ function escapeHtml(str=""){
   return String(str).replace(/[&<>"']/g, m => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[m]));
+}
+
+/* 검색 정규화(한글/띄어쓰기/기호 차이 흡수) */
+function normalizeText(s=""){
+  return String(s)
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/\s+/g, "")
+    .replace(/[·•,\-_.:;()|[\]{}]/g, "");
 }
 
 function setActiveTab(name){
@@ -71,20 +81,37 @@ function listNo(it, idx){
   return String(idx + 1).padStart(2,"0");
 }
 
+/* ✅ kw 기반 한글 검색 (화면은 영어 유지) */
 function matchesSearch(it, keyword){
-  if(!keyword) return true;
-  const hay = [
+  const k = normalizeText(keyword || "");
+  if(!k) return true;
+
+  const hay = normalizeText([
     it.no, it.name, it.sub, it.desc,
+    it.kw,                    // ✅ 보이지 않는 한글 키워드
     (it.origin||[]).join(" "),
     it.process, it.variety,
     (it.cup_note||[]).join(" "),
     it.roast
-  ].filter(Boolean).join(" ").toLowerCase();
-  return hay.includes(keyword);
+  ].filter(Boolean).join(" "));
+
+  return hay.includes(k);
+}
+
+/* No Result 미니멀 메시지 */
+function renderEmpty(){
+  itemList.innerHTML = `
+    <div class="empty">
+      <div class="emptyBox">
+        <div class="emptyTitle">No Result — To. coffee haus</div>
+        <p class="emptySub">Try another keyword. (ex. 콜롬비아 · 에티오피아 · 디카페인 · 드립백 · 콜드브루)</p>
+      </div>
+    </div>
+  `;
 }
 
 function renderList(){
-  const keyword = (q.value||"").toLowerCase().trim();
+  const keyword = (q.value||"").trim();
 
   let filtered = ITEMS
     .filter(it => activeFilter === "all" ? true : it.type === activeFilter)
@@ -92,9 +119,14 @@ function renderList(){
 
   countTxt.textContent = String(filtered.length);
 
+  if(filtered.length === 0){
+    renderEmpty();
+    return;
+  }
+
   itemList.innerHTML = filtered.map((it, idx)=>{
     const no = escapeHtml(listNo(it, idx));
-    const title = escapeHtml(it.type === "blend" ? it.name : it.name);
+    const title = escapeHtml(it.name);
 
     const sub = it.type === "blend"
       ? escapeHtml((it.origin||[]).join(" · "))
@@ -120,30 +152,16 @@ function renderList(){
   }).join("");
 
   itemList.querySelectorAll(".item").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      goDetail(el.dataset.id);
-    });
+    el.addEventListener("click", ()=> goDetail(el.dataset.id));
   });
 }
 
-/* Recipes (fixed by your specs) */
+/* Recipes (네 스펙 고정) */
 const RECIPES = {
   blend_filter: {
     water_temp: "88°C",
-    hot: {
-      dose: "20g",
-      total: "300g",
-      pours: "30g (Bloom) → 90g → 170g → 20g",
-      add: "가수 10–20g",
-      time: "2:40"
-    },
-    ice: {
-      dose: "20g",
-      total: "200g",
-      pours: "30g (Bloom) → 40g → 110g → 20g",
-      note: "얼음 칠링",
-      time: "2:20"
-    }
+    hot: { dose:"20g", total:"300g", pours:"30g (Bloom) → 90g → 170g → 20g", add:"가수 10–20g", time:"2:40" },
+    ice: { dose:"20g", total:"200g", pours:"30g (Bloom) → 40g → 110g → 20g", note:"얼음 칠링", time:"2:20" }
   },
   blend_espresso: {
     "no12": { basket:"IMS 18g", dose:"16.8g", yield:"35g", time:"25–28s", temp:"93°C" },
@@ -152,42 +170,18 @@ const RECIPES = {
   },
   single_filter: {
     water_temp: "90°C",
-    hot: {
-      dose: "20g",
-      total: "300ml",
-      pours: "30g → 90g → 170g → 20g",
-      add: "가수 10–20g",
-      time: "2:30"
-    },
-    ice: {
-      dose: "20g",
-      total: "200ml",
-      pours: "30g → 50g → 100g → 20g",
-      time: "2:30"
-    }
+    hot: { dose:"20g", total:"300ml", pours:"30g → 90g → 170g → 20g", add:"가수 10–20g", time:"2:30" },
+    ice: { dose:"20g", total:"200ml", pours:"30g → 50g → 100g → 20g", time:"2:30" }
   },
   single_espresso: {
     ethiopia: { basket:"IMS 18g", dose:"16.8g", yield:"47g", time:"38–40s", temp:"93°C" },
     default:  { basket:"IMS 18g", dose:"17.5g", yield:"50g", time:"40–43s", temp:"93°C" }
   },
   dripbag_guide: {
-    hot: {
-      temp:"90°C",
-      total:"180g",
-      pours:"Bloom 20g 포함 · 총 4회 나눔 (총량 180g)",
-      time:"1:30–1:40"
-    },
-    ice: {
-      temp:"90°C",
-      total:"110g",
-      pours:"첫 물 20g (Bloom) + 3번 나눔 (총량 110g)",
-      note:"추출 후 얼음 110g 넣고 저어 마시기",
-      time:"1:30–1:40"
-    }
+    hot: { temp:"90°C", total:"180g", pours:"Bloom 20g 포함 · 총 4회 나눔 (총량 180g)", time:"1:30–1:40" },
+    ice: { temp:"90°C", total:"110g", pours:"첫 물 20g (Bloom) + 3번 나눔 (총량 110g)", note:"추출 후 얼음 110g 넣고 저어 마시기", time:"1:30–1:40" }
   },
-  coldbrew_guide: {
-    lines: ["80g concentrate", "120g water", "Total 200g"]
-  }
+  coldbrew_guide: { lines: ["80g concentrate", "120g water", "Total 200g"] }
 };
 
 /* Roast -> position (0..1) */
@@ -202,17 +196,14 @@ function roastLevel(roast=""){
 
 function roastBarHtml(roast){
   if(!roast) return "";
-  const x = roastLevel(roast);
-  const pct = Math.max(0.05, Math.min(0.95, x)) * 100;
+  const pct = Math.max(0.05, Math.min(0.95, roastLevel(roast))) * 100;
 
   return `
     <div class="roastWrap">
       <div class="roastRow">
         <div class="roastLabel">Roasting Point</div>
         <div class="roastBar" aria-label="Roasting bar">
-          <div class="roastTicks" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i>
-          </div>
+          <div class="roastTicks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
           <div class="roastDot" style="left:${pct}%"></div>
         </div>
         <div class="roastLabel">${escapeHtml(roast)}</div>
@@ -222,7 +213,7 @@ function roastBarHtml(roast){
   `;
 }
 
-/* YouTube thumbnail helper */
+/* YouTube thumb */
 function createYouTubeThumb(videoId){
   return `
     <div class="yt-wrap" data-video="${escapeHtml(videoId)}">
@@ -244,23 +235,13 @@ function renderDetail(id){
     return;
   }
 
-  crumbName.textContent = it.type === "blend" ? `${it.no} ${it.name}` : (it.no ? `${it.no} ${it.name}` : it.name);
+  crumbName.textContent = (it.no ? `${it.no} ${it.name}` : it.name);
 
-  /* Title: main = NO.1 / S.1, subtitle = Daily / Colombia... */
-  const mainTitle =
-    (it.type === "blend" || it.type === "single")
-      ? escapeHtml(it.no || it.name)
-      : escapeHtml(it.name);
+  const mainTitle = (it.type === "blend" || it.type === "single") ? escapeHtml(it.no || it.name) : escapeHtml(it.name);
+  const subTitle  = (it.type === "blend" || it.type === "single") ? escapeHtml(it.name) : escapeHtml(it.sub || "");
+  const subtitle  = subTitle ? `<div class="subTitle">${subTitle}</div>` : "";
+  const desc      = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
 
-  const subTitle =
-    (it.type === "blend" || it.type === "single")
-      ? escapeHtml(it.name) /* 부제 */
-      : escapeHtml(it.sub || "");
-
-  const subtitle = subTitle ? `<div class="subTitle">${subTitle}</div>` : "";
-  const desc = it.desc ? `<p class="desc">${escapeHtml(it.desc)}</p>` : "";
-
-  /* chips */
   const chips = [];
   if(it.type === "blend"){
     if(it.origin?.length) chips.push(`Origin: ${it.origin.join(" · ")}`);
@@ -273,13 +254,12 @@ function renderDetail(id){
     if(it.sub) chips.push(it.sub);
   }
   const chipHtml = chips.map(x=>`<span class="chip">${escapeHtml(x)}</span>`).join("");
+  const roastGraphic = roastBarHtml(it.roast);
 
   const noteHtml = (it.cup_note||[]).map(n=>`<span class="chip">${escapeHtml(n)}</span>`).join("");
   const cupNoteBlock = (it.cup_note && it.cup_note.length)
     ? `<div class="card"><div class="sectionTitle">Cup Note</div><div class="subline">${noteHtml}</div></div>`
     : "";
-
-  const roastGraphic = roastBarHtml(it.roast);
 
   const videoBlock = it.video_id
     ? `<div class="card"><div class="sectionTitle">Video</div>${createYouTubeThumb(it.video_id)}</div>`
@@ -287,7 +267,6 @@ function renderDetail(id){
 
   let recipeBlocks = "";
 
-  /* BLEND */
   if(it.type === "blend"){
     const f = RECIPES.blend_filter;
     let esp;
@@ -299,7 +278,7 @@ function renderDetail(id){
       ? `<div class="card"><div class="sectionTitle">Cold Brew</div><pre>${RECIPES.coldbrew_guide.lines.join("\n")}</pre></div>`
       : "";
 
-    /* Espresso 위, Filter 아래 */
+    /* Espresso 위 / Filter 아래 */
     recipeBlocks = `
       <div class="card">
         <div class="sectionTitle">Espresso</div>
@@ -333,7 +312,6 @@ Time ${f.ice.time}</pre>
     `;
   }
 
-  /* SINGLE */
   if(it.type === "single"){
     if(it.coming_soon){
       recipeBlocks = `<div class="card"><div class="sectionTitle">Recipe</div><pre>Coming soon</pre></div>`;
@@ -372,7 +350,6 @@ Time ${f.ice.time}</pre>
     }
   }
 
-  /* GUIDE */
   if(it.type === "guide"){
     if(it.id === "guide-dripbag"){
       const g = RECIPES.dripbag_guide;
@@ -414,7 +391,7 @@ Time ${g.ice.time}</pre>
   `;
 }
 
-/* Click thumb -> play inside page */
+/* Click thumb -> play */
 document.addEventListener("click", (e)=>{
   const wrap = e.target.closest(".yt-wrap");
   if(!wrap) return;
@@ -431,6 +408,18 @@ document.addEventListener("click", (e)=>{
   `;
 });
 
+/* Header motion: 스크롤 시 컴팩트 + 검색 포커스 애니메이션 */
+function setupHeaderMotion(){
+  const onScroll = ()=>{
+    header.classList.toggle("isCompact", window.scrollY > 8);
+  };
+  window.addEventListener("scroll", onScroll, { passive:true });
+  onScroll();
+
+  q.addEventListener("focus", ()=> header.classList.add("isSearch"));
+  q.addEventListener("blur",  ()=> header.classList.remove("isSearch"));
+}
+
 async function init(){
   const res = await fetch("items.json", { cache:"no-store" });
   ITEMS = await res.json();
@@ -446,6 +435,8 @@ async function init(){
   });
 
   window.addEventListener("popstate", route);
+
+  setupHeaderMotion();
   route();
 }
 
