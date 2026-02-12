@@ -7,53 +7,56 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-<header class="header">
-  <div class="brand">
-    <a class="brandMark" href="#" id="homeBtn">
-      <span class="tch">T.C.H</span>
-    </a>
-    <div class="brandText">
-      <div class="name">TO. COFFEE HAUS</div>
-      <div class="tag">bean archive · recipe</div>
-    </div>
-  </div>
-
-  <div class="tools">
-    <div class="tabs" id="tabs">
-      <button class="tab isOn" data-filter="all">ALL</button>
-      <button class="tab" data-filter="blend">BLEND</button>
-      <button class="tab" data-filter="single">SINGLE</button>
-      <button class="tab" data-filter="guide">GUIDE</button>
+  <header class="header">
+    <div class="brand">
+      <a class="brandMark" href="#" id="homeBtn" aria-label="To. coffee haus home">
+        <span class="tch">T.C.H</span>
+        <span class="dots" aria-hidden="true">
+          <i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i>
+        </span>
+      </a>
+      <div class="brandText">
+        <div class="name">TO. COFFEE HAUS</div>
+        <div class="tag">bean archive · recipe</div>
+      </div>
     </div>
 
-    <input id="q" class="search" placeholder="검색 (이름/국가/노트)" />
-  </div>
-</header>
+    <div class="tools">
+      <div class="tabs" id="tabs">
+        <button class="tab isOn" data-filter="all" type="button">ALL</button>
+        <button class="tab" data-filter="blend" type="button">BLEND</button>
+        <button class="tab" data-filter="single" type="button">SINGLE</button>
+        <button class="tab" data-filter="guide" type="button">GUIDE</button>
+      </div>
 
-<main class="main">
-  <section id="listView" class="panel">
-    <div class="panelHead">
-      <div class="panelTitle">Select</div>
-      <div class="panelMeta"><span id="countTxt">0</span> items</div>
+      <input id="q" class="search" placeholder="검색 (이름/국가/노트)" autocomplete="off" />
     </div>
+  </header>
 
-    <div class="list" id="itemList"></div>
-    <footer class="foot">© To. coffee haus</footer>
-  </section>
+  <main class="main">
+    <section id="listView" class="panel">
+      <div class="panelHead">
+        <div class="panelTitle">Select</div>
+        <div class="panelMeta"><span id="countTxt">0</span> items</div>
+      </div>
 
-  <section id="detailView" class="panel hidden">
-    <div class="detailTop">
-      <button class="back" id="backBtn">← Back</button>
-      <div class="crumb"><span>Archive</span> · <span id="crumbName">Item</span></div>
-    </div>
+      <div class="list" id="itemList" role="list"></div>
 
-    <div id="detail" class="detail"></div>
-    <footer class="foot">© To. coffee haus</footer>
-  </section>
-</main>
+      <footer class="foot">© To. coffee haus</footer>
+    </section>
 
-<script src="app.js"></script>
+    <section id="detailView" class="panel hidden">
+      <div class="detailTop">
+        <button class="back" id="backBtn" type="button">← Back</button>
+        <div class="crumb"><span>Archive</span> · <span id="crumbName">Item</span></div>
+      </div>
+
+      <div id="detail" class="detail"></div>
+
+      <footer class="foot">© To. coffee haus</footer>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
-
