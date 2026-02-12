@@ -1,198 +1,231 @@
 :root{
-  --bg:#f6f1ea;           /* ✅ 크림 톤 */
-  --paper:#fbfaf8;        /* 카드 배경 */
-  --navy:#24324a;         /* 포인트 네이비 */
-  --text:#101827;
+  /* warm paper */
+  --bg:#fbf7ef;          /* 전체 베이지 */
+  --panel:#fbfaf7;       /* 카드/패널 */
+  --panel2:#f7f3eb;      /* 약간 더 진한 베이지 */
+
+  /* ink */
+  --navy:#24324a;
+  --text:#171a22;
   --sub:#6b7280;
-  --line:#e7e1d9;
-  --line2:#ded6cc;
+
+  /* line */
+  --line:#e7e0d6;
+  --line2:#ddd5c9;
+
+  /* radius */
+  --r:18px;
+  --r2:999px;
 }
 
-*{ box-sizing:border-box; }
-
-html,body{ height:100%; }
+*{box-sizing:border-box}
+html,body{height:100%}
 
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; /* ✅ 산세리프 유지 */
+  font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
 
-/* ---------- header ---------- */
+/* ===== Header ===== */
 .header{
   position:sticky;
   top:0;
-  z-index:20;
-  padding:22px 28px 16px;
-  background:rgba(246,241,234,.92);
-  backdrop-filter:saturate(140%) blur(8px);
-  border-bottom:1px solid rgba(231,225,217,.55);
+  z-index:10;
+  background:color-mix(in srgb, var(--bg) 86%, white 14%);
+  backdrop-filter:saturate(120%) blur(8px);
+  border-bottom:1px solid var(--line);
+  padding:22px 34px 18px;
+  transition:padding .2s ease;
+}
+
+.header.isCompact{
+  padding:14px 34px 12px;
 }
 
 .brand{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
-  gap:16px;
+  gap:18px;
 }
 
 .brandMark{
-  text-decoration:none;
-  color:var(--navy);
-  font-weight:800;
-  letter-spacing:.14em;
-  font-size:18px;
-  display:inline-flex;
+  display:flex;
   align-items:center;
   gap:10px;
+  text-decoration:none;
+  color:var(--navy);
 }
 
-.brandMark .dots{ display:none; } /* 점은 숨겨도 되고 원하면 켜도 됨 */
+.tch{
+  font-weight:750;
+  letter-spacing:.22em;
+  font-size:16px;
+}
+
+.dots{
+  display:inline-flex;
+  gap:6px;
+  transform:translateY(1px);
+}
+.dot{
+  width:4px;height:4px;border-radius:99px;
+  background:color-mix(in srgb, var(--navy) 70%, white 30%);
+  display:inline-block;
+  opacity:.85;
+}
 
 .brandText{
-  margin-left:8px;
+  text-align:right;
+  line-height:1.1;
 }
-
 .brandText .name{
-  font-size:14px;
+  font-size:13px;
   letter-spacing:.22em;
-  font-weight:700;
+  font-weight:650;
   color:var(--navy);
-  line-height:1.2;
 }
-
 .brandText .tag{
   font-size:12px;
-  color:var(--sub);
-  margin-top:4px;
-  letter-spacing:.06em;
+  color:color-mix(in srgb, var(--sub) 85%, var(--navy) 15%);
+  margin-top:6px;
+  letter-spacing:.08em;
 }
 
-/* tools row */
 .tools{
   margin-top:14px;
-  display:grid;
-  gap:12px;
 }
 
 .tabs{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
+  align-items:center;
 }
 
 .tab{
   border:1px solid var(--line2);
   background:transparent;
   padding:7px 14px;
-  border-radius:999px;
+  border-radius:var(--r2);
   cursor:pointer;
   font-size:13px;
-  letter-spacing:.08em;
-  color:rgba(16,24,39,.78);
+  letter-spacing:.06em;
+  color:color-mix(in srgb, var(--navy) 70%, black 30%);
 }
 
 .tab.isOn{
-  border-color:rgba(36,50,74,.22);
-  background:rgba(36,50,74,.08);
-  color:var(--navy);
+  background:var(--navy);
+  color:#fff;
+  border-color:var(--navy);
 }
 
 .search{
-  width:100%;
-  padding:14px 18px;
-  border-radius:999px;
-  border:1px solid rgba(222,214,204,.85);
-  background:rgba(251,250,248,.85);
+  margin-top:14px;
+  width:min(760px, 100%);
+  padding:12px 16px;
+  border-radius:var(--r2);
+  border:1px solid var(--line2);
+  background:color-mix(in srgb, var(--panel) 60%, white 40%);
   outline:none;
   font-size:14px;
+  color:var(--text);
 }
 
 .search:focus{
-  border-color:rgba(36,50,74,.28);
-  box-shadow:0 0 0 3px rgba(36,50,74,.08);
+  border-color:color-mix(in srgb, var(--navy) 38%, var(--line2) 62%);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--navy) 10%, transparent 90%);
 }
 
-/* ---------- layout ---------- */
+/* ===== Layout ===== */
 .main{
+  padding:26px 34px 44px;
   max-width:1080px;
-  margin:0 auto;
-  padding:32px 24px 56px;
+  margin:auto;
 }
 
 .panel{
-  background:var(--paper);
-  border:1px solid rgba(222,214,204,.9);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 8px 26px rgba(16,24,39,.06);
+  background:var(--panel);
+  border-radius:var(--r);
+  padding:30px;
+  border:1px solid var(--line);
 }
 
-.hidden{ display:none; }
+.hidden{display:none}
 
 .panelHead{
   display:flex;
+  align-items:baseline;
   justify-content:space-between;
-  align-items:center;
-  padding:18px 20px;
-  border-bottom:1px solid rgba(222,214,204,.85);
+  margin-bottom:14px;
 }
 
 .panelTitle{
-  font-size:12px;
-  letter-spacing:.26em;
-  font-weight:800;
+  font-weight:650;
+  letter-spacing:.2em;
   color:var(--navy);
+  font-size:12px;
+  text-transform:uppercase;
 }
 
 .panelMeta{
-  font-size:13px;
+  font-size:12px;
   color:var(--sub);
+  letter-spacing:.08em;
 }
 
-.list{
-  width:100%;
+.foot{
+  margin-top:18px;
+  font-size:12px;
+  color:color-mix(in srgb, var(--sub) 80%, var(--navy) 20%);
 }
 
-/* ---------- list items ---------- */
+/* ===== List ===== */
+.list{border-top:1px solid var(--line);}
+
 .item{
   display:flex;
   align-items:center;
   gap:16px;
-  padding:18px 20px;
-  border-bottom:1px solid rgba(222,214,204,.75);
+  padding:18px 6px;
+  border-bottom:1px solid var(--line);
   cursor:pointer;
-  background:transparent;
+  transition:background .12s ease;
 }
 
 .item:hover{
-  background:rgba(36,50,74,.03);
+  background:color-mix(in srgb, var(--panel2) 55%, transparent 45%);
 }
-
-.item:last-child{ border-bottom:none; }
 
 .no{
-  width:84px;
-  font-weight:800;
-  letter-spacing:.24em;
-  color:rgba(36,50,74,.88);
+  width:86px;
+  font-weight:750;
+  letter-spacing:.22em;
+  color:var(--navy);
 }
 
-.title{ flex:1; }
+.title{flex:1; min-width:0;}
 
 .mainT{
+  font-weight:700;
   font-size:16px;
-  font-weight:800;
-  color:rgba(16,24,39,.92);
   letter-spacing:.02em;
+  color:var(--text);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .subT{
-  margin-top:6px;
   font-size:13px;
-  color:rgba(107,114,128,.95);
+  color:color-mix(in srgb, var(--sub) 88%, var(--navy) 12%);
+  margin-top:6px;
   letter-spacing:.02em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .badgeCol{
@@ -202,174 +235,153 @@ body{
 }
 
 .badge{
-  border:1px solid rgba(36,50,74,.22);
+  border:1px solid var(--line2);
+  padding:6px 14px;
+  border-radius:var(--r2);
+  font-size:12px;
+  letter-spacing:.14em;
   color:var(--navy);
   background:transparent;
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:12px;
-  letter-spacing:.12em;
-  font-weight:700;
 }
 
 .badge.dim{
-  opacity:.45;
+  opacity:.5;
 }
 
 .chev{
-  color:rgba(107,114,128,.9);
+  color:color-mix(in srgb, var(--sub) 75%, var(--navy) 25%);
   font-size:18px;
-  margin-left:2px;
+  transform:translateY(-1px);
 }
 
-/* ---------- detail ---------- */
+/* ===== Detail top ===== */
 .detailTop{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:16px 20px;
-  border-bottom:1px solid rgba(222,214,204,.85);
-  background:rgba(251,250,248,.75);
+  margin-bottom:18px;
 }
 
 .back{
-  border:1px solid rgba(36,50,74,.22);
+  border:1px solid var(--line2);
   background:transparent;
-  color:var(--navy);
   border-radius:10px;
   padding:8px 12px;
   cursor:pointer;
-  font-weight:700;
+  font-size:14px;
 }
 
 .crumb{
+  color:var(--sub);
   font-size:14px;
-  color:rgba(107,114,128,.95);
 }
 
-/* ✅ 여기서 타입별 타이포 조정 */
-.detail{
-  padding:22px 20px 26px;
+/* ===== Cards inside detail ===== */
+.card{
+  background:transparent;
+  margin-bottom:18px;
 }
 
-/* blend: NO.1 더 크고 굵게 / DAILY는 조금 작고 얇게 */
-.detail.blend .h1{
-  font-size:44px;
-  font-weight:900;
+.h1{
+  /* Blend 기본: NO.1 강조 (너무 과하지 않게) */
+  font-size:54px;
+  font-weight:850;
   letter-spacing:.12em;
-  margin:0 0 8px 0;
-  color:rgba(16,24,39,.94);
-}
-
-.detail.blend .subTitle{
-  font-size:22px;
-  font-weight:420;
-  letter-spacing:.08em;
-  margin:0 0 18px 0;
-  color:rgba(16,24,39,.86);
-}
-
-/* single/guide: 상품명(=subTitle) 더 강조 */
-.detail.single .h1,
-.detail.guide .h1{
-  font-size:18px;
-  font-weight:750;
-  letter-spacing:.18em;
-  opacity:.65;
-  margin:0 0 6px 0;
-}
-
-.detail.single .subTitle,
-.detail.guide .subTitle{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:.02em;
-  margin:0 0 20px 0;
-}
-
-.h1{ /* 안전망: 기본값 */
-  font-size:40px;
-  font-weight:900;
-  letter-spacing:.12em;
+  line-height:1.05;
+  margin:0 0 10px 0;
+  color:var(--text);
 }
 
 .subTitle{
-  font-size:22px;
+  /* Blend 기본: DAILY는 조금 작고 가볍게 */
+  font-size:24px;
   font-weight:420;
-  letter-spacing:.08em;
+  letter-spacing:.06em;
+  margin:0 0 18px 0;
+  color:color-mix(in srgb, var(--text) 86%, var(--sub) 14%);
 }
 
-/* desc + info spacing */
 .desc{
-  margin:18px 0 34px;
+  margin:0 0 30px 0;  /* ✅ 설명과 아래 정보칩 간격 */
   line-height:1.75;
-  color:rgba(75,79,90,.96);
   font-size:16px;
+  color:color-mix(in srgb, var(--text) 78%, var(--sub) 22%);
+  white-space:pre-line;
 }
 
-/* chips */
 .subline{
-  margin-top:18px;
+  margin-top:10px;
 }
 
 .chip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 14px;
-  border-radius:999px;
-  border:1px solid rgba(222,214,204,.95);
-  background:rgba(251,250,248,.85);
+  display:inline-block;
+  padding:9px 16px;
+  border-radius:var(--r2);
+  border:1px solid var(--line2);
+  background:color-mix(in srgb, var(--panel) 70%, white 30%);
   font-size:14px;
+  letter-spacing:.04em;
+  margin:6px 8px 0 0;
+  color:var(--navy);
+}
+
+/* ✅ Single은 “상품명” 강조: h1(S.1)은 보조, subTitle(원두명)은 강조 */
+.detail.single .h1{
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:.14em;
+  opacity:.75;
+  margin-bottom:8px;
+}
+.detail.single .subTitle{
+  font-size:34px;
+  font-weight:820;
+  letter-spacing:.02em;
+  margin-bottom:18px;
+  color:var(--text);
+}
+
+/* ✅ Guide(MD)는 h1이 이미 상품명이므로 그대로 + subTitle만 보조 */
+.detail.guide .h1{
+  font-size:40px;
+  font-weight:840;
   letter-spacing:.08em;
-  color:rgba(16,24,39,.78);
-  margin:6px 10px 0 0;
+}
+.detail.guide .subTitle{
+  font-size:18px;
+  font-weight:450;
+  opacity:.8;
 }
 
-/* cards inside detail */
-.card{
-  padding:22px 22px;
-  border-bottom:1px solid rgba(222,214,204,.75);
-}
-
-.card:last-child{ border-bottom:none; }
-
-.sectionTitle{
-  font-size:12px;
-  letter-spacing:.22em;
-  font-weight:900;
-  color:rgba(36,50,74,.9);
-  margin-bottom:12px;
-}
-
-/* roast */
+/* ===== Roast bar ===== */
 .roastWrap{
-  margin-top:22px;
+  margin-top:20px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
 }
 
 .roastRow{
   display:flex;
   align-items:center;
-  gap:18px;
+  gap:14px;
 }
 
 .roastLabel{
   font-size:13px;
-  color:rgba(107,114,128,.92);
-  letter-spacing:.24em;
+  color:color-mix(in srgb, var(--sub) 86%, var(--navy) 14%);
+  letter-spacing:.18em;
+  text-transform:uppercase;
   white-space:nowrap;
 }
 
-.roastStack{
-  flex:1;
-}
+.roastStack{flex:1; min-width:0;}
 
 .roastBar{
-  height:10px;
-  border-radius:999px;
-  background:rgba(36,50,74,.08);
+  height:8px;
+  background:color-mix(in srgb, var(--line) 55%, white 45%);
+  border-radius:var(--r2);
   position:relative;
-  border:1px solid rgba(36,50,74,.10);
+  overflow:hidden;
 }
 
 .roastTicks{
@@ -378,77 +390,69 @@ body{
   display:flex;
   justify-content:space-between;
   padding:0 10px;
-  opacity:.35;
+  opacity:.65;
 }
-
 .roastTicks i{
   width:1px;
   height:100%;
-  background:rgba(36,50,74,.35);
+  background:color-mix(in srgb, var(--line2) 70%, transparent 30%);
   display:block;
 }
 
 .roastDot{
-  width:12px;
-  height:12px;
-  border-radius:999px;
+  width:12px;height:12px;
   background:var(--navy);
+  border-radius:50%;
   position:absolute;
   top:50%;
   transform:translate(-50%,-50%);
-  box-shadow:0 4px 12px rgba(36,50,74,.22);
 }
 
 .roastMarks{
   display:flex;
   justify-content:space-between;
   margin-top:8px;
-  color:rgba(107,114,128,.92);
   font-size:12px;
-  letter-spacing:.32em;
+  color:color-mix(in srgb, var(--sub) 88%, var(--navy) 12%);
+  letter-spacing:.18em;
+}
+.roastMarks .mid{transform:translateX(-1px);}
+
+/* ===== Recipe blocks (pre) ===== */
+.sectionTitle{
+  font-weight:700;
+  letter-spacing:.10em;
+  color:var(--navy);
+  margin:0 0 12px 0;
+  text-transform:uppercase;
+  font-size:12px;
 }
 
-.roastMarks .mid{ transform:translateX(-2px); }
-
-/* recipe pre */
 pre{
-  margin:0;
-  background:rgba(36,50,74,.04);
-  border:1px solid rgba(36,50,74,.10);
+  background:color-mix(in srgb, var(--panel2) 72%, white 28%);
+  border:1px solid var(--line);
   padding:16px 16px;
   border-radius:14px;
   font-size:13px;
-  line-height:1.7;
-  color:rgba(16,24,39,.88);
+  line-height:1.65;
+  color:color-mix(in srgb, var(--text) 84%, var(--sub) 16%);
   overflow:auto;
 }
 
-/* footer */
-.foot{
-  padding:18px 20px;
-  border-top:1px solid rgba(222,214,204,.75);
-  color:rgba(107,114,128,.9);
-  font-size:12px;
-  background:rgba(251,250,248,.6);
+/* ===== Animations (optional) ===== */
+.panel.enter{animation:fadeIn .22s ease both}
+.panel.leave{animation:fadeOut .18s ease both}
+@keyframes fadeIn{from{opacity:.0; transform:translateY(6px)}to{opacity:1; transform:none}}
+@keyframes fadeOut{from{opacity:1; transform:none}to{opacity:0; transform:translateY(4px)}}
+
+/* mobile */
+@media (max-width:720px){
+  .header{padding:18px 16px 14px}
+  .header.isCompact{padding:12px 16px}
+  .main{padding:18px 16px 34px}
+  .panel{padding:22px}
+  .no{width:70px}
+  .h1{font-size:44px}
+  .detail.single .subTitle{font-size:30px}
 }
 
-/* empty state */
-.empty{
-  padding:38px 20px;
-}
-.emptyBox{
-  border:1px dashed rgba(36,50,74,.22);
-  background:rgba(36,50,74,.03);
-  border-radius:16px;
-  padding:22px;
-}
-.emptyTitle{
-  font-weight:900;
-  letter-spacing:.12em;
-  color:rgba(36,50,74,.9);
-}
-.emptySub{
-  margin-top:8px;
-  color:rgba(107,114,128,.95);
-  line-height:1.6;
-}
