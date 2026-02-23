@@ -4,6 +4,7 @@
     "type": "blend",
     "no": "NO.1",
     "name": "DAILY",
+    "video_id": "sYl-fXFOhls",
     "desc": "가볍고 산뜻한 고소함.\n마시기 편안한 데일리 블렌드.",
     "cup_note": ["Cashew Nut", "Caramel", "Milk Chocolate"],
     "origin": ["Brazil", "Guatemala", "Ethiopia"],
@@ -128,6 +129,7 @@
     "name": "DRIP BAG",
     "sub": "1 Bag · 11g",
     "desc": "10ea box · brew guide",
+    "video_id": "tJ-mOz8qdHo",
     "kw": "드립백 dripbag 드립백레시피 레시피 brew guide 핸드드립 아이스 hot ice 11g 10개입 10ea"
   },
   {
@@ -136,7 +138,7 @@
     "name": "COLD BREW",
     "sub": "No.1 · No.2 · No.5",
     "desc": "serve guide",
+    "video_id": "BPH_tgsnnHk",
     "kw": "콜드브루 coldbrew 콜드 브루 더치 농축액 concentrate 서빙 serve 가이드 guide no1 no2 no5"
   }
 ]
-
