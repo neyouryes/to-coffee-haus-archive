@@ -1,3 +1,13 @@
+/* app.js — To. coffee haus | Archive (FULL)
+   - tabs filter (all/blend/single/guide)
+   - search (name/origin/cup_note/kw)
+   - list view + detail view
+   - URL param routing (?id=xxx)
+   - header states: isCompact / isSearch
+   - YouTube thumb -> click to play
+   - ✅ Auto video label (no extra field needed)
+*/
+
 let ITEMS = [];
 let activeFilter = "all";
 
@@ -246,15 +256,34 @@ function roastBarHtml(roast){
   `;
 }
 
-/* video */
-function createYouTubeThumb(videoId){
+/* ---------- Video Label Auto Generator ---------- */
+function videoLabel(it){
+  if(it.type === "guide"){
+    if(it.id === "guide-coldbrew") return "Cold Brew Recipe";
+    if(it.id === "guide-dripbag") return "Drip Bag Brew Guide";
+    return "Guide Video";
+  }
+  if(it.type === "blend"){
+    const head = it.no ? `${it.no} ` : "";
+    return `${head}Espresso Recipe`;
+  }
+  if(it.type === "single"){
+    const head = it.no ? `${it.no} ` : "";
+    return `${head}Recipe`;
+  }
+  return "Recipe";
+}
+
+/* video thumb */
+function createYouTubeThumb(videoId, caption="Recipe"){
+  const cap = escapeHtml(caption);
   return `
-    <div class="yt-wrap" data-video="${escapeHtml(videoId)}">
-      <button class="yt-thumb" type="button" aria-label="Play recipe video">
-        <img src="https://i.ytimg.com/vi/${escapeHtml(videoId)}/hqdefault.jpg" alt="Recipe video thumbnail">
+    <div class="yt-wrap" data-video="${escapeHtml(videoId)}" data-caption="${cap}">
+      <button class="yt-thumb" type="button" aria-label="Play ${cap}">
+        <img src="https://i.ytimg.com/vi/${escapeHtml(videoId)}/hqdefault.jpg" alt="${cap} thumbnail">
         <div class="yt-overlay"></div>
         <div class="yt-playDot" aria-hidden="true"></div>
-        <div class="yt-caption">recipe</div>
+        <div class="yt-caption">${cap}</div>
       </button>
     </div>
   `;
@@ -298,7 +327,10 @@ function renderDetail(id){
     : "";
 
   const videoBlock = it.video_id
-    ? `<div class="card"><div class="sectionTitle">Video</div>${createYouTubeThumb(it.video_id)}</div>`
+    ? `<div class="card">
+         <div class="sectionTitle">Video</div>
+         ${createYouTubeThumb(it.video_id, videoLabel(it))}
+       </div>`
     : `<div class="card">
          <div class="sectionTitle">Video</div>
          <div class="emptyBox" style="margin-top:10px">
@@ -447,12 +479,14 @@ document.addEventListener("click", (e)=>{
   if(wrap.querySelector("iframe")) return;
 
   const id = wrap.dataset.video;
+  const cap = wrap.dataset.caption || "Recipe";
+
   wrap.innerHTML = `
     <iframe
       src="https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
       allow="autoplay; encrypted-media; picture-in-picture"
       allowfullscreen
-      title="Recipe video">
+      title="${cap}">
     </iframe>
   `;
 });
@@ -488,4 +522,3 @@ async function init(){
 }
 
 init();
-
