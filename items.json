@@ -9,8 +9,7 @@
     "cup_note": ["Cashew Nut", "Caramel", "Milk Chocolate"],
     "origin": ["Brazil", "Guatemala", "Ethiopia"],
     "roast": "Medium",
-    "cold_brew": true,
-    "kw": "데일리 daily 고소 산뜻 캐슈넛 cashew 카라멜 caramel 밀크초콜릿 milkchocolate 브라질 brazil 과테말라 guatemala 에티오피아 ethiopia 블렌드"
+    "cold_brew": true
   },
   {
     "id": "blend-no2-signature",
@@ -21,8 +20,7 @@
     "cup_note": ["Kyoho Grape", "Dried Plum", "Red Wine", "Syrup"],
     "origin": ["Tanzania", "Guatemala", "Ethiopia"],
     "roast": "Medium",
-    "cold_brew": true,
-    "kw": "시그니처 시그니쳐 signature 레드와인 redwine 버건디 burgundy 거봉 kyoho 포도 건자두 driedplum 자두 와인 시럽 syrup 탄자니아 tanzania 과테말라 guatemala 에티오피아 ethiopia 블렌드"
+    "cold_brew": true
   },
   {
     "id": "blend-no3-sweetness",
@@ -33,8 +31,7 @@
     "cup_note": ["Tiramisu", "Digestive Cookie", "Oatmeal"],
     "origin": ["Brazil", "Guatemala", "Colombia"],
     "roast": "Medium-Dark",
-    "cold_brew": false,
-    "kw": "스윗니스 스위트니스 sweetness 디저트 티라미수 tiramisu 다이제 다이제쿠키 digestivecookie 오트밀 oatmeal 크리미 달콤 쌉싸름 브라질 brazil 과테말라 guatemala 콜롬비아 colombia 블렌드"
+    "cold_brew": false
   },
   {
     "id": "blend-no4-dark",
@@ -45,8 +42,7 @@
     "cup_note": ["Dark Chocolate", "Roasted Walnut", "Long Finish"],
     "origin": ["Brazil", "Colombia"],
     "roast": "Dark",
-    "cold_brew": false,
-    "kw": "다크 dark 블랙 카리스마 다크초콜렛 darkchocolate 초콜릿 구운호두 roastedwalnut 호두 긴여운 longfinish 브라질 brazil 콜롬비아 colombia 블렌드"
+    "cold_brew": false
   },
   {
     "id": "blend-no5-decaf",
@@ -57,8 +53,7 @@
     "cup_note": ["Persimmon", "Caramel", "Popcorn", "Juicy"],
     "origin": ["Brazil", "Ethiopia"],
     "roast": "Medium",
-    "cold_brew": true,
-    "kw": "디카페인 디카프 decaf decaffeine decaffeinated 카페인없음 카페인프리 밤 휴식 홍시 persimmon 카라멜 caramel 팝콘 popcorn 쥬시 juicy 브라질 brazil 에티오피아 ethiopia 블렌드"
+    "cold_brew": true
   },
 
   {
@@ -73,54 +68,63 @@
     "variety": "Aji Bourbon",
     "cup_note": ["Banana", "Strawberry", "Milk Chocolate"],
     "roast": "Light",
-    "espresso_profile": "default",
-    "kw": "콜롬비아 colombia 엘엔칸토 elencanto 엔칸토 finca 자연 내추럴 natural 아히버번 ajibourbon 버번 바나나 banana 딸기 strawberry 밀크초콜릿 milkchocolate 디저트 싱글 싱글오리진"
+    "espresso_profile": "default"
   },
   {
-    "id": "single-ethiopia-aricha-gedeb-heirloom-natural",
+    "id": "single-colombia-el-diviso-sidra-bourbon-natural",
     "type": "single",
     "no": "S.2",
-    "name": "Ethiopia Aricha Gedeb",
-    "sub": "Heirloom · Natural",
-    "desc": "블랙베리와 체리의 어두운 산미,\n밀키한 초콜릿의 부드러움이 균형을 이룹니다.",
-    "origin": ["Ethiopia"],
+    "name": "Colombia El Diviso",
+    "sub": "Sidra Bourbon · Natural",
+    "desc": "패션프루트의 열대 과일 향과 홍차의 우아함,\n망고의 달콤함이 이어지는 화사한 싱글 오리진.",
+    "origin": ["Colombia"],
     "process": "Natural",
-    "variety": "Heirloom",
-    "cup_note": ["Blackberry", "Cherry", "Milk Chocolate"],
+    "variety": "Sidra Bourbon",
+    "cup_note": ["Passionfruit", "Black Tea", "Mango"],
     "roast": "Light",
-    "espresso_profile": "ethiopia",
-    "kw": "에티오피아 ethiopia 아리차 aricha 게뎁 gedeb 헤어룸 heirloom 내추럴 natural 블랙베리 blackberry 체리 cherry 밀키초콜릿 milkchocolate 산미 싱글 싱글오리진"
+    "espresso_profile": "default"
   },
-
   {
-    "id": "single-coming-soon-03",
+    "id": "single-peru-la-poderosa-geisha-washed",
     "type": "single",
     "no": "S.3",
-    "name": "Single Origin 03",
-    "sub": "Coming soon",
-    "desc": "Details will be updated.",
-    "coming_soon": true,
-    "kw": "싱글 single 싱글오리진 comingsoon 업데이트예정 예정"
+    "name": "Peru La Poderosa",
+    "sub": "Geisha · Washed",
+    "desc": "라벤더의 플로럴 향과 살구, 복숭아의 부드러운 과실감.\n실키한 질감이 길게 이어지는 싱글 오리진.",
+    "origin": ["Peru"],
+    "process": "Washed",
+    "variety": "Geisha",
+    "cup_note": ["Lavender", "Apricot", "Peach", "Silky"],
+    "roast": "Light",
+    "espresso_profile": "default"
   },
   {
-    "id": "single-coming-soon-04",
+    "id": "single-rwanda-humure-red-bourbon-washed",
     "type": "single",
     "no": "S.4",
-    "name": "Single Origin 04",
-    "sub": "Coming soon",
-    "desc": "Details will be updated.",
-    "coming_soon": true,
-    "kw": "싱글 single 싱글오리진 comingsoon 업데이트예정 예정"
+    "name": "Rwanda Humure",
+    "sub": "Red Bourbon · Fully Washed",
+    "desc": "포도와 체리의 선명한 과실감에\n머스켓의 향긋함과 허니, 민트의 여운이 이어지는 싱글 오리진.",
+    "origin": ["Rwanda"],
+    "process": "Fully Washed",
+    "variety": "Red Bourbon",
+    "cup_note": ["Grape", "Cherry", "Muscat", "Honey", "Mint"],
+    "roast": "Light",
+    "espresso_profile": "default"
   },
   {
-    "id": "single-coming-soon-05",
+    "id": "single-kenya-nagariama-aa-top-washed",
     "type": "single",
     "no": "S.5",
-    "name": "Single Origin 05",
-    "sub": "Coming soon",
-    "desc": "Details will be updated.",
-    "coming_soon": true,
-    "kw": "싱글 single 싱글오리진 comingsoon 업데이트예정 예정"
+    "name": "Kenya Nagariama",
+    "sub": "AA TOP · Washed",
+    "desc": "청귤티의 상큼함과 라즈베리의 밝은 산미,\n밀크초콜릿의 부드러운 단맛이 균형을 이루는 싱글 오리진.",
+    "origin": ["Kenya"],
+    "process": "Washed",
+    "variety": "SL28 · SL34",
+    "cup_note": ["Green Tangerine Tea", "Raspberry", "Milk Chocolate"],
+    "roast": "Light",
+    "espresso_profile": "default"
   },
 
   {
@@ -129,8 +133,7 @@
     "name": "DRIP BAG",
     "sub": "1 Bag · 11g",
     "desc": "10ea box · brew guide",
-    "video_id": "tJ-mOz8qdHo",
-    "kw": "드립백 dripbag 드립백레시피 레시피 brew guide 핸드드립 아이스 hot ice 11g 10개입 10ea"
+    "video_id": "tJ-mOz8qdHo"
   },
   {
     "id": "guide-coldbrew",
@@ -138,7 +141,6 @@
     "name": "COLD BREW",
     "sub": "No.1 · No.2 · No.5",
     "desc": "serve guide",
-    "video_id": "BPH_tgsnnHk",
-    "kw": "콜드브루 coldbrew 콜드 브루 더치 농축액 concentrate 서빙 serve 가이드 guide no1 no2 no5"
+    "video_id": "BPH_tgsnnHk"
   }
 ]
